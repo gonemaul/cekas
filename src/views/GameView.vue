@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted,nextTick } from 'vue'
 import { useRouter,useRoute } from 'vue-router'
 import { dbService } from '@/services/dbService'
 import { generateQuestionLogic } from '@/services/questionGenerator'
@@ -9,18 +9,28 @@ const props = defineProps(['mode', 'level'])
 const router = useRouter()
 const route = useRoute()
 
+const inputField = ref(null)
 const question = ref({ display: '', answer: 0 })
 const userInput = ref('')
-const isWrong = ref(false)
-const combo = ref(0)
 const score = ref(0)
 const currentStep = ref(1)
-const timeLeft = ref(5)
 const isFinished = ref(false)
+const isWrong = ref(false)
+const combo = ref(0)
+// Ambil timer dari query (misal: 3, 5, atau 8). Default ke 5 jika tidak ada.
+const timeLimit = ref(parseFloat(route.query.timer) || 5)
+const timeLeft = ref(timeLimit.value)
 const startTime = ref(null)
-const totalTimeSpent = ref(0) // Dalam detik
+const totalTimeSpent = ref(0)
 let timerInterval = null
 
+const focusInput = () => {
+  nextTick(() => {
+    if (inputField.value) {
+      inputField.value.focus()
+    }
+  })
+}
 // Panggil ini saat game pertama kali dimulai (soal nomor 1)
 const startGameTimer = () => {
   startTime.value = Date.now()
@@ -34,21 +44,15 @@ const stopGameTimer = () => {
   }
 }
 
-const generateQuestion = () => {
-  // Panggil logic dari file terpisah
-  const newQuestion = generateQuestionLogic(
-    props.mode, 
-    props.level, 
-    route.query.method
-  );
+const resetTimer = () => {
+  timeLeft.value = timeLimit.value
+  clearInterval(timerInterval)
+  timerInterval = setInterval(() => {
+    timeLeft.value -= 0.1
+    if (timeLeft.value <= 0) nextQuestion()
+  }, 100)
+}
 
-  // Update state
-  question.value = newQuestion;
-  userInput.value = '';
-  
-  if (currentStep.value === 1 && !startTime.value) startGameTimer();
-  resetTimer();
-};
 
 const translateMode = (mode) => {
   const map = {
@@ -69,14 +73,21 @@ const translateLevel = (level) => {
   return map[level] || level
 }
 
-const resetTimer = () => {
-  timeLeft.value = 5 // Detik per soal
-  clearInterval(timerInterval)
-  timerInterval = setInterval(() => {
-    timeLeft.value -= 0.1
-    if (timeLeft.value <= 0) nextQuestion()
-  }, 100)
-}
+const generateQuestion = () => {
+  // Panggil logic dari file terpisah
+  const newQuestion = generateQuestionLogic(
+    props.mode, 
+    props.level, 
+    route.query.method
+  );
+
+  // Update state
+  question.value = newQuestion;
+  userInput.value = '';
+  
+  if (currentStep.value === 1 && !startTime.value) startGameTimer();
+  resetTimer();
+};
 
 const checkAnswer = () => {
   const userAnsStr = userInput.value.toString()
@@ -103,6 +114,7 @@ const nextQuestion = () => {
   if (currentStep.value < 10) {
     currentStep.value++
     generateQuestion()
+    focusInput()
   } else {
     finishGame()
   }
@@ -138,7 +150,10 @@ const finishGame = () => {
   saveHistory()
 }
 
-onMounted(generateQuestion)
+onMounted(() => {
+  generateQuestion()
+  focusInput()
+})
 onUnmounted(() => clearInterval(timerInterval))
 </script>
 
@@ -177,8 +192,8 @@ onUnmounted(() => clearInterval(timerInterval))
       <div class="w-full bg-slate-100 h-2.5 rounded-full mb-10 overflow-hidden">
         <div
           class="h-full transition-all duration-100 ease-linear"
-          :class="timeLeft < 2 ? 'bg-red-500' : 'bg-blue-500'"
-          :style="{ width: (timeLeft / 5) * 100 + '%' }"
+          :class="timeLeft < (timeLimit * 0.3) ? 'bg-red-500' : 'bg-blue-500'"
+          :style="{ width: (timeLeft / timeLimit) * 100 + '%' }"
         ></div>
       </div>
 
@@ -194,13 +209,13 @@ onUnmounted(() => clearInterval(timerInterval))
 
       <div class="relative">
         <input
+        ref="inputField"
           v-model="userInput"
           @input="checkAnswer"
           type="number"
           inputmode="numeric"
           :class="['w-full text-center text-5xl p-6 bg-slate-50 border-2 border-slate-100 rounded-[2rem] focus:bg-white  outline-none transition-all font-black text-slate-800', isWrong ? 'animate-shake border-red-500 focus:border-red-500' : 'focus:border-blue-500']"
           placeholder="?"
-          ref="inputField"
           autofocus
         />
         

@@ -1,8 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { APP_IDENTITY } from '@/constants/appConfig'
-// Import Icons
 import {
   PlusIcon,
   MinusIcon,
@@ -15,45 +13,16 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
-const step = ref(1) // 1: Pilih Mode, 2: Pilih Level
+const step = ref(1) 
 const selectedMode = ref('')
+const selectedLevel = ref('')
 
 const modes = [
-  {
-    id: 'addition',
-    name: 'Penjumlahan',
-    desc: 'Asah kecepatan totalitas angka.',
-    icon: PlusIcon,
-    color: 'bg-blue-500',
-  },
-  {
-    id: 'subtraction',
-    name: 'Pengurangan',
-    desc: 'Latih ketelitian selisih nilai.',
-    icon: MinusIcon,
-    color: 'bg-emerald-500',
-  },
-  {
-    id: 'multiplication',
-    name: 'Perkalian',
-    desc: 'Tingkatkan daya ingat kelipatan.',
-    icon: XMarkIcon,
-    color: 'bg-amber-500',
-  },
-  {
-    id: 'division',
-    name: 'Pembagian',
-    desc: 'Uji logika distribusi angka.',
-    icon: VariableIcon,
-    color: 'bg-indigo-500',
-  },
-  {
-    id: 'random',
-    name: 'Campuran',
-    desc: 'Tantangan otak multifungsi.',
-    icon: SparklesIcon,
-    color: 'bg-rose-500',
-  },
+  { id: 'addition', name: 'Penjumlahan', desc: 'Asah kecepatan totalitas angka.', icon: PlusIcon, color: 'bg-blue-500' },
+  { id: 'subtraction', name: 'Pengurangan', desc: 'Latih ketelitian selisih nilai.', icon: MinusIcon, color: 'bg-emerald-500' },
+  { id: 'multiplication', name: 'Perkalian', desc: 'Tingkatkan daya ingat kelipatan.', icon: XMarkIcon, color: 'bg-amber-500' },
+  { id: 'division', name: 'Pembagian', desc: 'Uji logika distribusi angka.', icon: VariableIcon, color: 'bg-indigo-500' },
+  { id: 'random', name: 'Campuran', desc: 'Tantangan otak multifungsi.', icon: SparklesIcon, color: 'bg-rose-500' },
 ]
 
 const levels = [
@@ -63,78 +32,105 @@ const levels = [
   { id: 'berantai', name: 'Berantai', desc: '3-5 Angka Acak' },
 ]
 
-const selectMode = (modeId) => {
-  selectedMode.value = modeId
+const difficulties = [
+  { id: 8, label: 'Santai', time: 8, color: 'bg-emerald-500', desc: 'Cocok untuk Belajar' },
+  { id: 5, label: 'Normal', time: 5, color: 'bg-blue-500', desc: 'Standar FastMath' },
+  { id: 3, label: 'Kilat', time: 3, color: 'bg-red-500', desc: 'Uji Refleks Otak' }
+]
+
+// Fungsi Navigasi State
+const handleSelectMode = (id) => {
+  selectedMode.value = id
   step.value = 2
 }
 
-const startGame = (levelId) => {
-  router.push({ name: 'game', params: { mode: selectedMode.value, level: levelId } })
+const handleSelectLevel = (id) => {
+  selectedLevel.value = id
+  step.value = 3
+}
+
+const startGame = (timeLimit) => {
+  router.push({
+    name: 'game',
+    params: { 
+      mode: selectedMode.value, 
+      level: selectedLevel.value 
+    },
+    query: { timer: timeLimit }
+  })
 }
 </script>
 
 <template>
   <div class="space-y-6">
+    <button
+      v-if="step > 1"
+      @click="step--"
+      class="flex items-center gap-2 text-slate-400 font-bold text-sm mb-2 hover:text-blue-600 transition-colors"
+    >
+      <ArrowLeftIcon class="w-4 h-4" /> KEMBALI
+    </button>
+
     <div v-if="step === 1" class="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <h2 class="text-xl font-black text-slate-800 mb-6 flex items-center gap-2">
+      <h2 class="text-xl font-black text-slate-800 mb-6 flex items-center gap-2 uppercase tracking-tight">
         <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
-        PILIH OPERASI
+        Pilih Operasi
       </h2>
 
       <div class="grid gap-4">
         <button
           v-for="mode in modes"
           :key="mode.id"
-          @click="selectMode(mode.id)"
+          @click="handleSelectMode(mode.id)"
           class="group flex items-center justify-between p-5 bg-white border-2 border-slate-100 rounded-3xl hover:border-blue-500 transition-all active:scale-95 shadow-sm"
         >
           <div class="flex items-center gap-4 text-left">
-            <div
-              :class="[
-                mode.color,
-                'p-3 rounded-2xl text-white shadow-lg shadow-blue-50/50 shrink-0',
-              ]"
-            >
+            <div :class="[mode.color, 'p-3 rounded-2xl text-white shadow-lg shrink-0']">
               <component :is="mode.icon" class="w-6 h-6 stroke-[3]" />
             </div>
             <div>
-              <span class="block font-extrabold text-slate-700 text-lg leading-tight">
-                {{ mode.name }}
-              </span>
-              <span class="block text-xs text-slate-400 font-medium mt-0.5">
-                {{ mode.desc }}
-              </span>
+              <span class="block font-extrabold text-slate-700 text-lg leading-tight">{{ mode.name }}</span>
+              <span class="block text-xs text-slate-400 font-medium mt-0.5">{{ mode.desc }}</span>
             </div>
           </div>
-
-          <ChevronRightIcon
-            class="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors shrink-0"
-          />
+          <ChevronRightIcon class="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors shrink-0" />
         </button>
       </div>
     </div>
 
-    <div v-if="step === 2" class="animate-in fade-in zoom-in duration-300">
-      <button
-        @click="step = 1"
-        class="flex items-center gap-2 text-slate-400 font-bold text-sm mb-6 hover:text-blue-600"
-      >
-        <ArrowLeftIcon class="w-4 h-4" /> KEMBALI
-      </button>
-
-      <h2 class="text-xl font-black text-slate-800 mb-6">TINGKAT KESULITAN</h2>
-
+    <div v-if="step === 2" class="animate-in fade-in slide-in-from-right-4 duration-300">
+      <h2 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tight">Tingkat Kesulitan</h2>
       <div class="grid gap-4">
         <button
           v-for="lvl in levels"
           :key="lvl.id"
-          @click="startGame(lvl.id)"
+          @click="handleSelectLevel(lvl.id)"
           class="p-6 bg-white border-2 border-slate-100 rounded-3xl text-left hover:border-emerald-500 hover:bg-emerald-50 transition-all active:scale-95 shadow-sm group"
         >
-          <p class="font-black text-slate-700 text-xl group-hover:text-emerald-700">
-            {{ lvl.name }}
-          </p>
+          <p class="font-black text-slate-700 text-xl group-hover:text-emerald-700 uppercase">{{ lvl.name }}</p>
           <p class="text-sm text-slate-400 font-medium">{{ lvl.desc }}</p>
+        </button>
+      </div>
+    </div>
+
+    <div v-if="step === 3" class="animate-in fade-in zoom-in duration-300">
+      <h2 class="text-xl font-black text-slate-800 mb-2 uppercase tracking-tight">Target Waktu Per Soal</h2>
+      <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mb-6 italic">Seberapa cepat kamu berpikir?</p>
+      
+      <div class="grid gap-4">
+        <button
+          v-for="diff in difficulties"
+          :key="diff.id"
+          @click="startGame(diff.id)"
+          class="p-6 bg-white border-2 border-slate-100 rounded-[2rem] text-left hover:border-amber-500 transition-all active:scale-95 shadow-sm group flex items-center justify-between"
+        >
+          <div>
+            <p class="font-black text-slate-700 text-xl uppercase group-hover:text-amber-600">{{ diff.label }}</p>
+            <p class="text-sm text-slate-400 font-medium">{{ diff.desc }}</p>
+          </div>
+          <div class="text-2xl font-black text-amber-500 bg-amber-50 w-14 h-14 rounded-2xl flex items-center justify-center border border-amber-100">
+            {{ diff.time }}s
+          </div>
         </button>
       </div>
     </div>
@@ -152,7 +148,7 @@ const startGame = (levelId) => {
         class="w-full p-5 bg-white shadow-md border-2 border-slate-200 rounded-3xl text-slate-600 flex items-center justify-center gap-3 hover:border-blue-200 hover:bg-blue-50 transition-all active:scale-95"
       >
         <ClockIcon class="w-5 h-5 text-blue-500" />
-        <span class="font-bold tracking-tight text-slate-700">Lihat Riwayat Skor</span>
+        <span class="font-bold tracking-tight text-slate-700 uppercase text-sm">Lihat Riwayat Skor</span>
       </button>
     </div>
   </div>
