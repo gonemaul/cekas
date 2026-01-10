@@ -1,8 +1,10 @@
 export const APP_IDENTITY = {
-  name: 'FastMath Academy',
-  slogan: 'Mastering Numbers, One Trick at a Time.',
-  version: 'v1.5.0-beta',
-  copyright: '2026 FastMath Academy. Crafted for Excellence.',
+  name: 'Cekas',
+  fullName: 'Cekas Arithmetic',
+  slogan: 'Tangkas Berhitung, Cerdas Menalar',
+  version: 'v1.5.1-beta',
+  copyright: 'Cekas Digital Indonesia',
+  description: 'Platform pelatihan mental aritmatika dengan metode kilat dan menyenangkan.',
   colors: {
     primary: '#2563EB',
     secondary: '#10B981',

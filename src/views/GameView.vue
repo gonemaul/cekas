@@ -200,7 +200,7 @@ onUnmounted(() => clearInterval(timerInterval))
       
       <div
         :class="[
-          'font-black mb-10 text-slate-700 text-center italic transition-all duration-300 drop-shadow-sm',
+          'font-black mb-10 text-slate-700 text-center italic tracking-tighter transition-all duration-300 drop-shadow-sm',
           question.display.length > 10 ? 'text-4xl' : 'text-6xl',
         ]"
       >

@@ -15,7 +15,7 @@ const startGuidedPractice = () => {
       mode: lesson.config.mode, 
       level: lesson.config.range 
     },
-    query: { method: lesson.id } // ID ini dibaca GameView untuk logika khusus
+    query: { timer: 10,method: lesson.id } // ID ini dibaca GameView untuk logika khusus
   })
 }
 </script>

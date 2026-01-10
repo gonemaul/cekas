@@ -1,12 +1,33 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,800&display=swap');
 
 @theme {
-    /* Identitas Warna FastMath Academy */
+    /* Identitas Warna Cekas */
+    --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
     --color-primary: #2563EB;
     --color-secondary: #10B981;
     --color-accent: #F59E0B;
     --color-surface: #F8FAFC;
 }
+
+:root {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+}
+
+/* Standarisasi Gaya Tulisan */
+.heading-primary {
+    @apply font-extrabold tracking-tighter uppercase;
+}
+
+.text-caption {
+    @apply text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400;
+}
+
+
 
 /* Base Style */
 @layer base {

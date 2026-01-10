@@ -32,5 +32,41 @@ const router = createRouter({
     },
   ],
 })
+router.afterEach((to) => {
+  const baseTitle = 'Cekas'
+  const slogan = 'Tangkas Berhitung'
+
+  // Logika penentuan judul berdasarkan nama rute
+  switch (to.name) {
+    case 'game':
+      document.title = `Sedang Bermain... | ${baseTitle}`
+      break
+    case 'learn':
+      document.title = `Kurikulum Metode | ${baseTitle}`
+      break
+    case 'lesson-detail':
+      // Jika ingin lebih detail, judul bisa diambil dari parameter atau state
+      document.title = `Belajar Teknik | ${baseTitle}`
+      break
+    case 'history':
+      document.title = `Riwayat Skor | ${baseTitle}`
+      break
+    case 'home':
+      document.title = `${baseTitle} — ${slogan}`
+      break
+    default:
+      document.title = baseTitle
+  }
+  if (to.name === 'lesson-detail' && to.params.id) {
+    // Mengubah kebab-case menjadi Capitalized Words
+    const lessonName = to.params.id
+      .split('-')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+
+    document.title = `${lessonName} | ${baseTitle}`
+    return // Keluar dari fungsi agar tidak tertimpa switch di atas
+  }
+})
 
 export default router
