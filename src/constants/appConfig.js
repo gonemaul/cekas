@@ -1,7 +1,7 @@
 export const APP_IDENTITY = {
   name: 'FastMath Academy',
   slogan: 'Mastering Numbers, One Trick at a Time.',
-  version: 'v1.2.1-beta',
+  version: 'v1.3.0-beta',
   copyright: '2026 FastMath Academy. Crafted for Excellence.',
   colors: {
     primary: '#2563EB',

@@ -8,6 +8,7 @@ import {
   ArrowTrendingUpIcon,
   ArrowTrendingDownIcon,
   MinusIcon,
+  ClockIcon
 } from '@heroicons/vue/24/solid'
 
 const router = useRouter()
@@ -64,7 +65,7 @@ const clearHistory = () => {
 
     <div v-if="historyData.length === 0" class="text-center py-20">
       <div class="bg-slate-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-        <MinusIcon class="w-8 h-8 text-slate-300" />
+        <ClockIcon class="w-8 h-8 text-slate-300" />
       </div>
       <p class="text-slate-400 italic font-medium">Belum ada catatan bermain.</p>
     </div>
