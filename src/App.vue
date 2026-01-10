@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { APP_IDENTITY } from '@/constants/appConfig'
+import AppHeader from '@/components/AppHeader.vue';
 
 const screen = ref('menu') // menu, game, history
 const settings = reactive({
@@ -25,8 +26,8 @@ onMounted(loadHistory)
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50 text-slate-800 font-sans">
-    <header class="max-w-md mx-auto pt-8 mb-5 px-4 flex justify-between items-end">
+  <div class="max-w-xl mx-auto min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans">
+    <!-- <header class="max-w-md mx-auto pt-8 mb-5 px-4 flex justify-between items-end">
       <div>
         <h1 class="text-3xl font-black tracking-tighter text-blue-600 leading-none">
           FASTMATH<span class="text-slate-400">.</span
@@ -41,14 +42,17 @@ onMounted(loadHistory)
           {{ APP_IDENTITY.version }}
         </span>
       </div>
-    </header>
+    </header> -->
+    <AppHeader />
 
-    <main class="max-w-md mx-auto p-4 pb-20">
+    <main class="flex-grow p-4 mt-6">
       <RouterView />
     </main>
 
-    <footer class="max-w-md mx-auto p-6 text-center border-t border-slate-200 mt-auto">
-      <p class="text-[11px] text-slate-400 font-medium">&copy; {{ APP_IDENTITY.copyright }}</p>
+    <footer class="p-8 text-center border-t border-slate-100">
+      <p class="text-[11px] text-slate-400 font-medium italic">
+        &copy; {{ APP_IDENTITY.copyright }}
+      </p>
     </footer>
   </div>
 </template>

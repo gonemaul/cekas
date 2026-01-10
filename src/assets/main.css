@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+    /* Identitas Warna FastMath Academy */
+    --color-primary: #2563EB;
+    --color-secondary: #10B981;
+    --color-accent: #F59E0B;
+    --color-surface: #F8FAFC;
+}
+
+/* Base Style */
+@layer base {
+    body {
+        @apply bg-[var(--color-surface)] text-slate-800 antialiased;
+    }
+}

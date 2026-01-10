@@ -1,10 +1,12 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
+import { dbService } from '@/services/dbService'
 import { ClockIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps(['mode', 'level'])
 const router = useRouter()
+const route = useRoute()
 
 const question = ref({ display: '', answer: 0 })
 const userInput = ref('')
@@ -30,12 +32,35 @@ const stopGameTimer = () => {
 }
 
 const generateQuestion = () => {
+  const methodId = route.query.method
+  const methodConfig = methodId ? dbService.getGameConfigByLessonId(methodId) : null
+  
+  let finalAnswer = 0
+  let displayStr = ''
   if (currentStep.value === 1 && !startTime.value) {
     startGameTimer()
   }
-  let finalAnswer = 0
-  let displayStr = ''
 
+  if (methodId === 'trik-perkalian-11') {
+    // Trik Perkalian 11: Pastikan salah satu angka adalah 11
+    let min = 10, max = 99; // Default puluhan
+    let a = Math.floor(Math.random() * (max - min + 1)) + min;
+    let b = 11; 
+    // Acak posisi 11 agar tidak bosan
+    if (Math.random() > 0.5) [a, b] = [b, a];
+    
+    finalAnswer = a * b;
+    displayStr = `${a} × ${b}`;
+  }
+  else if (methodId === 'pembulatan-sembilan') {
+    // Trik Pembulatan 9: Pastikan angka kedua berakhiran 9
+    let a = Math.floor(Math.random() * 90) + 10;
+    let b = (Math.floor(Math.random() * 9) * 10) + 9; // Menghasilkan 9, 19, 29, ... 89
+    
+    finalAnswer = a + b;
+    displayStr = `${a} + ${b}`;
+  }
+  else {
   // Fungsi untuk ambil operator berdasarkan pilihan Mode
   const getOpSymbol = () => {
     const activeMode =
@@ -116,7 +141,7 @@ const generateQuestion = () => {
       finalAnswer = a / b
     }
     displayStr = `${a} ${op.symbol} ${b}`
-  }
+  }}
 
   question.value = { display: displayStr, answer: finalAnswer }
   userInput.value = ''
@@ -209,6 +234,11 @@ onUnmounted(() => clearInterval(timerInterval))
       v-if="!isFinished"
       class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-blue-500 text-center"
     >
+    <div v-if="route.query.method" class="mb-4">
+  <div class="inline-block bg-amber-100 text-amber-700 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-amber-200">
+    Latihan Khusus: {{ dbService.getLessonById(route.query.method)?.title }}
+  </div>
+</div>
       <div class="flex justify-between items-center mb-6 text-sm font-bold text-slate-400">
         <span>SOAL {{ currentStep }}/10</span>
         <span class="text-red-500">{{ timeLeft.toFixed(1) }}s</span>

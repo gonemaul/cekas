@@ -1,0 +1,30 @@
+{
+  "lessons": [
+    {
+      "id": "trik-perkalian-11",
+      "title": "Kilat Perkalian 11",
+      "category": "Perkalian",
+      "difficulty": "Mudah",
+      "theory": "Jumlahkan dua digit angka tersebut, lalu selipkan hasilnya di tengah-tengah.",
+      "example": "24 x 11 → 2 + 4 = 6 → Hasil: 264",
+      "config": {
+        "mode": "multiplication",
+        "forcedNumber": 11,
+        "range": "puluhan"
+      }
+    },
+    {
+      "id": "pembulatan-sembilan",
+      "title": "Teknik Pembulatan 9",
+      "category": "Penjumlahan",
+      "difficulty": "Menengah",
+      "theory": "Jika menjumlahkan angka berakhiran 9, bulatkan ke atas (+10) lalu kurangi 1 di akhir.",
+      "example": "34 + 19 → (34 + 20) - 1 = 53",
+      "config": {
+        "mode": "addition",
+        "endsWith": 9,
+        "range": "puluhan"
+      }
+    }
+  ]
+}
