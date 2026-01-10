@@ -1,53 +1,46 @@
-# 🎓 FastMath Academy
-> **Mastering Numbers, One Trick at a Time.**
+# ⚡ Cekas — Tangkas Berhitung
 
-**FastMath Academy** adalah platform pembelajaran matematika interaktif modern yang dirancang untuk mentransformasi cara orang berlatih berhitung mental. Bukan sekadar permainan angka, aplikasi ini menggabungkan teknik kalkulasi cepat (*mental math tricks*) dengan mesin latihan yang adaptif.
-
-
+**Cekas** adalah platform latihan mental aritmatika yang dirancang untuk mengubah cara kita berhitung: dari yang tadinya membosankan menjadi sebuah tantangan refleks yang seru. Nama "Cekas" diambil dari bahasa lokal yang berarti **tangkas, cepat, dan responsif.**
 
 ---
 
-## 🌟 Visi Aplikasi
-Dibuat untuk pelajar dan profesional yang ingin mengasah ketajaman otak, FastMath Academy bertujuan untuk membangun intuisi angka melalui latihan yang terstruktur, cepat, dan menyenangkan tanpa ketergantungan pada kalkulator.
+## 💡 Konsep Utama
 
-## 🚀 Fitur Unggulan
+Aplikasi ini bekerja dengan menggabungkan **kecepatan (Speed)** dan **metode (Method)**. Fokus utamanya bukan sekadar menjawab benar, tapi melatih otak untuk menemukan jawaban dalam hitungan detik menggunakan trik logika yang efisien.
 
-### 1. Kurikulum Berbasis Metode (E-Learning)
-Dilengkapi dengan pustaka digital yang menyimpan berbagai metode rahasia berhitung cepat, mulai dari teknik perkalian angka kembar hingga metode pembulatan (*rounding*) untuk penjumlahan kompleks.
+### 1. Sistem 3 Langkah Bermain
+Cekas dirancang dengan alur yang sangat sederhana bagi pengguna:
+* **Pilih Operasi:** Tentukan tantanganmu (Penjumlahan, Pengurangan, Perkalian, Pembagian, atau Campuran).
+* **Pilih Level:** Mulai dari angka satuan yang santai hingga angka ratusan yang menantang.
+* **Pilih Target Waktu:** Sesuaikan tantangan dengan kemampuanmu:
+    * **Santai (8 detik):** Untuk yang baru belajar atau anak-anak.
+    * **Normal (5 detik):** Standar kecepatan orang dewasa.
+    * **Kilat (3 detik):** Uji refleks otak tingkat dewa!
 
-### 2. Generator Soal Adaptif
-Mesin latihan yang dapat disesuaikan sepenuhnya:
-* **Tingkat Kesulitan:** Satuan, Puluhan, hingga Ratusan.
-* **Operasi Berantai:** Melatih *working memory* dengan tantangan 3-5 angka dalam satu soal.
-* **Mode Campuran:** Menguji fleksibilitas kognitif dengan operator yang berubah secara acak.
+### 2. Belajar Sambil Bermain (Metode Kilat)
+Cekas tidak hanya memberi soal, tapi juga menyediakan **Kurikulum Metode**. Di sini kamu bisa mempelajari trik-trik matematika yang jarang diajarkan di sekolah umum, seperti:
+* Cara hitung cepat perkalian angka 11.
+* Logika kuadrat angka yang berakhiran 5.
+* Trik pembagian cepat, dan banyak lagi.
 
-### 3. Analitik & Riwayat Performa
-Sistem pelacakan skor otomatis yang menyimpan riwayat latihan terakhir lengkap dengan indikator tren (Naik/Turun) untuk melihat perkembangan kemampuan berhitung dari waktu ke waktu.
-
-### 4. Pengalaman Pengguna Premium
-Antarmuka *mobile-first* yang bersih dan responsif, memastikan fokus penuh pada angka dengan skema warna yang menenangkan mata untuk sesi belajar durasi lama.
-
----
-
-## 🛠️ Arsitektur Teknologi
-
-Aplikasi ini dibangun dengan standar industri modern untuk menjamin kecepatan dan keandalan:
-* **Framework:** Vue.js 3 (Composition API)
-* **Routing:** Vue Router (Single Page Application)
-* **Styling:** Tailwind CSS v4.0 (Performance-first CSS)
-* **Icons:** Heroicons (Refined SVG Icons)
-* **Build Tool:** Vite
-* **Storage:** LocalStorage API (Data Persistence)
+### 3. Umpan Balik Instan
+Aplikasi memberikan respon langsung jika jawabanmu salah melalui getaran visual dan pesan penyemangat. Di akhir sesi, kamu bisa melihat **Riwayat Skor** untuk memantau seberapa jauh perkembangan ketangkasanmu dari hari ke hari.
 
 ---
 
-## 🔐 Batasan & Privasi
-* **Tanpa Registrasi:** Semua data skor dan progres disimpan secara lokal di perangkat pengguna.
-* **Keamanan:** Tidak ada data yang dikirim ke server luar; privasi pengguna terjaga sepenuhnya.
-* **Optimasi:** Dirancang khusus untuk penggunaan pada peramban seluler (Mobile Browser).
+## 🎯 Siapa yang Cocok Menggunakan Cekas?
+
+* **Pelajar & Anak-anak:** Untuk membangun kepercayaan diri dengan angka sejak dini.
+* **Mahasiswa & Calon Pekerja:** Sangat membantu untuk persiapan ujian logika atau tes kerja (psikotes).
+* **Umum:** Siapa saja yang ingin menjaga otak tetap tajam dan mencegah kepikunan melalui senam otak harian.
 
 ---
 
-**Version:** 1.2.1-beta  
-**Project Status:** Online Active  
-**Copyright:** © 2026 FastMath Academy. Crafted for Excellence.
+## 🌟 Mengapa Memilih Cekas?
+
+* **Lokal & Modern:** Menggunakan bahasa yang akrab dan tampilan yang sangat bersih.
+* **Tanpa Gangguan:** Fokus penuh pada soal dan waktu tanpa elemen yang membingungkan.
+* **Metode Terbukti:** Menggunakan teknik dasar Vedic Maths yang memudahkan perhitungan rumit.
+
+---
+*"Bukan soal seberapa jago kamu menghitung, tapi seberapa **Cekas** otakmu bereaksi!"*
