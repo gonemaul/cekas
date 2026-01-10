@@ -13,16 +13,46 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
-const step = ref(1) 
+const step = ref(1)
 const selectedMode = ref('')
 const selectedLevel = ref('')
 
 const modes = [
-  { id: 'addition', name: 'Penjumlahan', desc: 'Asah kecepatan totalitas angka.', icon: PlusIcon, color: 'bg-blue-500' },
-  { id: 'subtraction', name: 'Pengurangan', desc: 'Latih ketelitian selisih nilai.', icon: MinusIcon, color: 'bg-emerald-500' },
-  { id: 'multiplication', name: 'Perkalian', desc: 'Tingkatkan daya ingat kelipatan.', icon: XMarkIcon, color: 'bg-amber-500' },
-  { id: 'division', name: 'Pembagian', desc: 'Uji logika distribusi angka.', icon: VariableIcon, color: 'bg-indigo-500' },
-  { id: 'random', name: 'Campuran', desc: 'Tantangan otak multifungsi.', icon: SparklesIcon, color: 'bg-rose-500' },
+  {
+    id: 'addition',
+    name: 'Penjumlahan',
+    desc: 'Asah kecepatan totalitas angka.',
+    icon: PlusIcon,
+    color: 'bg-blue-500',
+  },
+  {
+    id: 'subtraction',
+    name: 'Pengurangan',
+    desc: 'Latih ketelitian selisih nilai.',
+    icon: MinusIcon,
+    color: 'bg-emerald-500',
+  },
+  {
+    id: 'multiplication',
+    name: 'Perkalian',
+    desc: 'Tingkatkan daya ingat kelipatan.',
+    icon: XMarkIcon,
+    color: 'bg-amber-500',
+  },
+  {
+    id: 'division',
+    name: 'Pembagian',
+    desc: 'Uji logika distribusi angka.',
+    icon: VariableIcon,
+    color: 'bg-indigo-500',
+  },
+  {
+    id: 'random',
+    name: 'Campuran',
+    desc: 'Tantangan otak multifungsi.',
+    icon: SparklesIcon,
+    color: 'bg-rose-500',
+  },
 ]
 
 const levels = [
@@ -35,7 +65,7 @@ const levels = [
 const difficulties = [
   { id: 8, label: 'Santai', time: 8, color: 'bg-emerald-500', desc: 'Cocok untuk Belajar' },
   { id: 5, label: 'Normal', time: 5, color: 'bg-blue-500', desc: 'Standar FastMath' },
-  { id: 3, label: 'Kilat', time: 3, color: 'bg-red-500', desc: 'Uji Refleks Otak' }
+  { id: 3, label: 'Kilat', time: 3, color: 'bg-red-500', desc: 'Uji Refleks Otak' },
 ]
 
 // Fungsi Navigasi State
@@ -52,11 +82,11 @@ const handleSelectLevel = (id) => {
 const startGame = (timeLimit) => {
   router.push({
     name: 'game',
-    params: { 
-      mode: selectedMode.value, 
-      level: selectedLevel.value 
+    params: {
+      mode: selectedMode.value,
+      level: selectedLevel.value,
     },
-    query: { timer: timeLimit }
+    query: { timer: timeLimit },
   })
 }
 </script>
@@ -72,7 +102,9 @@ const startGame = (timeLimit) => {
     </button>
 
     <div v-if="step === 1" class="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <h2 class="text-xl font-black text-slate-800 mb-6 flex items-center gap-2 uppercase tracking-tight">
+      <h2
+        class="text-xl font-black text-slate-800 mb-6 flex items-center gap-2 uppercase tracking-tight"
+      >
         <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
         Pilih Operasi
       </h2>
@@ -89,17 +121,23 @@ const startGame = (timeLimit) => {
               <component :is="mode.icon" class="w-6 h-6 stroke-[3]" />
             </div>
             <div>
-              <span class="block font-extrabold text-slate-700 text-lg leading-tight">{{ mode.name }}</span>
+              <span class="block font-extrabold text-slate-700 text-lg leading-tight">{{
+                mode.name
+              }}</span>
               <span class="block text-xs text-slate-400 font-medium mt-0.5">{{ mode.desc }}</span>
             </div>
           </div>
-          <ChevronRightIcon class="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors shrink-0" />
+          <ChevronRightIcon
+            class="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors shrink-0"
+          />
         </button>
       </div>
     </div>
 
     <div v-if="step === 2" class="animate-in fade-in slide-in-from-right-4 duration-300">
-      <h2 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tight">Tingkat Kesulitan</h2>
+      <h2 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tight">
+        Tingkat Kesulitan
+      </h2>
       <div class="grid gap-4">
         <button
           v-for="lvl in levels"
@@ -107,16 +145,22 @@ const startGame = (timeLimit) => {
           @click="handleSelectLevel(lvl.id)"
           class="p-6 bg-white border-2 border-slate-100 rounded-3xl text-left hover:border-emerald-500 hover:bg-emerald-50 transition-all active:scale-95 shadow-sm group"
         >
-          <p class="font-black text-slate-700 text-xl group-hover:text-emerald-700 uppercase">{{ lvl.name }}</p>
+          <p class="font-black text-slate-700 text-xl group-hover:text-emerald-700 uppercase">
+            {{ lvl.name }}
+          </p>
           <p class="text-sm text-slate-400 font-medium">{{ lvl.desc }}</p>
         </button>
       </div>
     </div>
 
     <div v-if="step === 3" class="animate-in fade-in zoom-in duration-300">
-      <h2 class="text-xl font-black text-slate-800 mb-2 uppercase tracking-tight">Target Waktu Per Soal</h2>
-      <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mb-6 italic">Seberapa cepat kamu berpikir?</p>
-      
+      <h2 class="text-xl font-black text-slate-800 mb-2 uppercase tracking-tight">
+        Target Waktu Per Soal
+      </h2>
+      <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mb-6 italic">
+        Seberapa cepat kamu berpikir?
+      </p>
+
       <div class="grid gap-4">
         <button
           v-for="diff in difficulties"
@@ -125,10 +169,14 @@ const startGame = (timeLimit) => {
           class="p-6 bg-white border-2 border-slate-100 rounded-[2rem] text-left hover:border-amber-500 transition-all active:scale-95 shadow-sm group flex items-center justify-between"
         >
           <div>
-            <p class="font-black text-slate-700 text-xl uppercase group-hover:text-amber-600">{{ diff.label }}</p>
+            <p class="font-black text-slate-700 text-xl uppercase group-hover:text-amber-600">
+              {{ diff.label }}
+            </p>
             <p class="text-sm text-slate-400 font-medium">{{ diff.desc }}</p>
           </div>
-          <div class="text-2xl font-black text-amber-500 bg-amber-50 w-14 h-14 rounded-2xl flex items-center justify-center border border-amber-100">
+          <div
+            class="text-2xl font-black text-amber-500 bg-amber-50 w-14 h-14 rounded-2xl flex items-center justify-center border border-amber-100"
+          >
             {{ diff.time }}s
           </div>
         </button>
@@ -148,7 +196,9 @@ const startGame = (timeLimit) => {
         class="w-full p-5 bg-white shadow-md border-2 border-slate-200 rounded-3xl text-slate-600 flex items-center justify-center gap-3 hover:border-blue-200 hover:bg-blue-50 transition-all active:scale-95"
       >
         <ClockIcon class="w-5 h-5 text-blue-500" />
-        <span class="font-bold tracking-tight text-slate-700 uppercase text-sm">Lihat Riwayat Skor</span>
+        <span class="font-bold tracking-tight text-slate-700 uppercase text-sm"
+          >Lihat Riwayat Skor</span
+        >
       </button>
     </div>
   </div>

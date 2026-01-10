@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { APP_IDENTITY } from '@/constants/appConfig'
-import AppHeader from '@/components/AppHeader.vue';
+import AppHeader from '@/components/AppHeader.vue'
 
 const screen = ref('menu') // menu, game, history
 const settings = reactive({

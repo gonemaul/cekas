@@ -70,57 +70,56 @@
         "range": "puluhan",
         "forcedNumber": 5
       }
+    },
+    {
+      "id": "perkalian-sembilan-jari",
+      "title": "Sihir Perkalian 9",
+      "category": "Perkalian",
+      "difficulty": "Mudah",
+      "theory": "Untuk angka satuan (n x 9), angka pertama jawaban adalah (n-1) dan angka kedua adalah pelengkapnya agar berjumlah 9.",
+      "example": "7 x 9 → (7-1=6) dan (9-6=3) → Hasil: 63",
+      "tips": "Ingat, jumlah digit hasil perkalian 9 selalu berjumlah 9!",
+      "config": { "mode": "multiplication", "forcedNumber": 9, "range": "satuan" }
+    },
+    {
+      "id": "pasangan-sepuluh",
+      "title": "Pasangan Sepuluh",
+      "category": "Penjumlahan",
+      "difficulty": "Mudah",
+      "theory": "Cari pasangan angka yang berjumlah 10 untuk menyederhanakan penjumlahan panjang.",
+      "example": "8 + 7 + 2 → (8+2) + 7 = 17",
+      "tips": "Fokus pada angka satuan yang jika dijumlahkan menjadi 10 (1-9, 2-8, 3-7, dst).",
+      "config": { "mode": "addition", "type": "pair10", "range": "berantai" }
+    },
+    {
+      "id": "perkalian-dua-puluh-lima",
+      "title": "Magic 25",
+      "category": "Perkalian",
+      "difficulty": "Menengah",
+      "theory": "Mengalikan dengan 25 sama dengan membagi angka tersebut dengan 4, lalu dikali 100.",
+      "example": "16 x 25 → (16/4) = 4 → Hasil: 400",
+      "tips": "Sangat mudah digunakan untuk angka genap kelipatan 4.",
+      "config": { "mode": "multiplication", "forcedNumber": 25, "range": "puluhan" }
+    },
+    {
+      "id": "pengurangan-pecah-puluhan",
+      "title": "Pecah Puluhan",
+      "category": "Pengurangan",
+      "difficulty": "Menengah",
+      "theory": "Kurangi dulu hingga mencapai angka puluhan terdekat, baru sisa pengurangnya diambil.",
+      "example": "53 - 15 → (53 - 13) - 2 = 38",
+      "tips": "Metode ini menghindari 'pinjam angka' yang sering membuat bingung.",
+      "config": { "mode": "subtraction", "type": "split", "range": "puluhan" }
+    },
+    {
+      "id": "estimasi-pembagian",
+      "title": "Estimasi Cepat",
+      "category": "Pembagian",
+      "difficulty": "Sulit",
+      "theory": "Hapus angka nol yang sama pada pembagi dan yang dibagi untuk menyederhanakan.",
+      "example": "1200 / 300 → 12 / 3 = 4",
+      "tips": "Selalu cari angka nol yang bisa 'dicoret' terlebih dahulu.",
+      "config": { "mode": "division", "type": "zero-cancel", "range": "ratusan" }
     }
-  ,
-  {
-    "id": "perkalian-sembilan-jari",
-    "title": "Sihir Perkalian 9",
-    "category": "Perkalian",
-    "difficulty": "Mudah",
-    "theory": "Untuk angka satuan (n x 9), angka pertama jawaban adalah (n-1) dan angka kedua adalah pelengkapnya agar berjumlah 9.",
-    "example": "7 x 9 → (7-1=6) dan (9-6=3) → Hasil: 63",
-    "tips": "Ingat, jumlah digit hasil perkalian 9 selalu berjumlah 9!",
-    "config": { "mode": "multiplication", "forcedNumber": 9, "range": "satuan" }
-  },
-  {
-    "id": "pasangan-sepuluh",
-    "title": "Pasangan Sepuluh",
-    "category": "Penjumlahan",
-    "difficulty": "Mudah",
-    "theory": "Cari pasangan angka yang berjumlah 10 untuk menyederhanakan penjumlahan panjang.",
-    "example": "8 + 7 + 2 → (8+2) + 7 = 17",
-    "tips": "Fokus pada angka satuan yang jika dijumlahkan menjadi 10 (1-9, 2-8, 3-7, dst).",
-    "config": { "mode": "addition", "type": "pair10", "range": "berantai" }
-  },
-  {
-    "id": "perkalian-dua-puluh-lima",
-    "title": "Magic 25",
-    "category": "Perkalian",
-    "difficulty": "Menengah",
-    "theory": "Mengalikan dengan 25 sama dengan membagi angka tersebut dengan 4, lalu dikali 100.",
-    "example": "16 x 25 → (16/4) = 4 → Hasil: 400",
-    "tips": "Sangat mudah digunakan untuk angka genap kelipatan 4.",
-    "config": { "mode": "multiplication", "forcedNumber": 25, "range": "puluhan" }
-  },
-  {
-    "id": "pengurangan-pecah-puluhan",
-    "title": "Pecah Puluhan",
-    "category": "Pengurangan",
-    "difficulty": "Menengah",
-    "theory": "Kurangi dulu hingga mencapai angka puluhan terdekat, baru sisa pengurangnya diambil.",
-    "example": "53 - 15 → (53 - 13) - 2 = 38",
-    "tips": "Metode ini menghindari 'pinjam angka' yang sering membuat bingung.",
-    "config": { "mode": "subtraction", "type": "split", "range": "puluhan" }
-  },
-  {
-    "id": "estimasi-pembagian",
-    "title": "Estimasi Cepat",
-    "category": "Pembagian",
-    "difficulty": "Sulit",
-    "theory": "Hapus angka nol yang sama pada pembagi dan yang dibagi untuk menyederhanakan.",
-    "example": "1200 / 300 → 12 / 3 = 4",
-    "tips": "Selalu cari angka nol yang bisa 'dicoret' terlebih dahulu.",
-    "config": { "mode": "division", "type": "zero-cancel", "range": "ratusan" }
-  }
-]
+  ]
 }

@@ -1,68 +1,65 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,800&display=swap');
 
 @theme {
-    /* Identitas Warna Cekas */
-    --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-    --color-primary: #2563EB;
-    --color-secondary: #10B981;
-    --color-accent: #F59E0B;
-    --color-surface: #F8FAFC;
+  /* Identitas Warna Cekas */
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --color-primary: #2563eb;
+  --color-secondary: #10b981;
+  --color-accent: #f59e0b;
+  --color-surface: #f8fafc;
 }
 
 :root {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 body {
-    @apply bg-slate-50 text-slate-900 antialiased;
+  @apply bg-slate-50 text-slate-900 antialiased;
 }
 
 /* Standarisasi Gaya Tulisan */
 .heading-primary {
-    @apply font-extrabold tracking-tighter uppercase;
+  @apply font-extrabold tracking-tighter uppercase;
 }
 
 .text-caption {
-    @apply text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400;
+  @apply text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400;
 }
-
-
 
 /* Base Style */
 @layer base {
-    body {
-        @apply bg-[var(--color-surface)] text-slate-800 antialiased;
-    }
+  body {
+    @apply bg-[var(--color-surface)] text-slate-800 antialiased;
+  }
 }
 
 @keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
 
-    0%,
-    100% {
-        transform: translateX(0);
-    }
+  25% {
+    transform: translateX(-8px);
+  }
 
-    25% {
-        transform: translateX(-8px);
-    }
-
-    75% {
-        transform: translateX(8px);
-    }
+  75% {
+    transform: translateX(8px);
+  }
 }
 
 .animate-shake {
-    animation: shake 0.2s ease-in-out 0s 2;
+  animation: shake 0.2s ease-in-out 0s 2;
 }
 
 .slide-up-enter-active,
 .slide-up-leave-active {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .slide-up-enter-from,
 .slide-up-leave-to {
-    transform: translateY(10px);
-    opacity: 0;
+  transform: translateY(10px);
+  opacity: 0;
 }

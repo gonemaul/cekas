@@ -8,7 +8,7 @@ import {
   ArrowTrendingUpIcon,
   ArrowTrendingDownIcon,
   MinusIcon,
-  ClockIcon
+  ClockIcon,
 } from '@heroicons/vue/24/solid'
 
 const router = useRouter()
