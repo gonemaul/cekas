@@ -1,7 +1,5 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import Game from './components/Game.vue'
-import History from './components/History.vue'
 
 const screen = ref('menu') // menu, game, history
 const settings = reactive({

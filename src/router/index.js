@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import GameView from '../views/GameView.vue'
+import HistoryView from '../views/HistoryView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,14 +10,14 @@ const router = createRouter({
     {
       path: '/game/:mode/:level',
       name: 'game',
-      component: () => import('../views/GameView.vue'),
+      component: GameView,
       props: true,
     },
-    // {
-    //   path: '/history',
-    //   name: 'history',
-    //   component: () => import('../HistoryView.vue'),
-    // },
+    {
+      path: '/history',
+      name: 'history',
+      component: HistoryView,
+    },
   ],
 })
 
