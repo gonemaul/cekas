@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 const props = defineProps(['mode', 'level'])
 const router = useRouter()
 
-const question = ref({ a: 0, b: 0, answer: 0, symbol: '' })
+const question = ref({ display: '', answer: 0 })
 const userInput = ref('')
 const score = ref(0)
 const currentStep = ref(1)
@@ -14,24 +14,82 @@ const isFinished = ref(false)
 let timerInterval = null
 
 const generateQuestion = () => {
-  let min = 1, max = 9
-  if (props.level === 'puluhan') { min = 10; max = 99 }
-  if (props.level === 'ratusan') { min = 100; max = 999 }
+  let finalAnswer = 0;
+  let displayStr = "";
+  
+  // Fungsi untuk ambil operator berdasarkan pilihan Mode
+  const getOpSymbol = () => {
+    const activeMode = props.mode === 'random' 
+      ? ['addition', 'subtraction', 'multiplication', 'division'][Math.floor(Math.random() * 4)]
+      : props.mode;
+    
+    const symbols = { addition: '+', subtraction: '-', multiplication: '×', division: '÷' };
+    return { name: activeMode, symbol: symbols[activeMode] };
+  };
 
-  let a = Math.floor(Math.random() * (max - min + 1)) + min
-  let b = Math.floor(Math.random() * (max - min + 1)) + min
-  let answer, symbol
+  if (props.level === 'berantai') {
+    // --- LOGIKA BERANTAI (3-5 Angka Satuan) ---
+    const count = Math.floor(Math.random() * 3) + 3; // 3, 4, atau 5 angka
+    let currentVal = Math.floor(Math.random() * 9) + 1;
+    finalAnswer = currentVal;
+    displayStr = currentVal.toString();
 
-  // Logic Operasi
-  if (props.mode === 'addition') { answer = a + b; symbol = '+' }
-  else if (props.mode === 'subtraction') { if(a < b) [a, b] = [b, a]; answer = a - b; symbol = '-' }
-  else if (props.mode === 'multiplication') { answer = a * b; symbol = '×' }
-  else { answer = a; a = a * b; symbol = '÷' }
+    for (let i = 1; i < count; i++) {
+      const nextVal = Math.floor(Math.random() * 9) + 1;
+      const op = getOpSymbol();
 
-  question.value = { a, b, answer, symbol }
-  userInput.value = ''
-  resetTimer()
-}
+      // Eksekusi kalkulasi berdasarkan operator yang didapat
+      if (op.name === 'addition') {
+        finalAnswer += nextVal;
+      } else if (op.name === 'subtraction') {
+        if (finalAnswer - nextVal < 0) { // Proteksi hasil negatif
+          finalAnswer += nextVal;
+          displayStr += ` + ${nextVal}`;
+          continue;
+        }
+        finalAnswer -= nextVal;
+      } else if (op.name === 'multiplication') {
+        finalAnswer *= nextVal;
+      } else { // Division
+        if (finalAnswer % nextVal === 0 && finalAnswer !== 0) {
+          finalAnswer /= nextVal;
+        } else { // Jika tidak bulat, ganti jadi tambah saja
+          finalAnswer += nextVal;
+          displayStr += ` + ${nextVal}`;
+          continue;
+        }
+      }
+      displayStr += ` ${op.symbol} ${nextVal}`;
+    }
+  } else {
+    // --- LOGIKA NORMAL (2 Angka: Satuan/Puluhan/Ratusan) ---
+    let min = 1, max = 9;
+    if (props.level === 'puluhan') { min = 10; max = 99; }
+    if (props.level === 'ratusan') { min = 100; max = 999; }
+
+    let a = Math.floor(Math.random() * (max - min + 1)) + min;
+    let b = Math.floor(Math.random() * (max - min + 1)) + min;
+    const op = getOpSymbol();
+
+    if (op.name === 'addition') {
+      finalAnswer = a + b;
+    } else if (op.name === 'subtraction') {
+      if (a < b) [a, b] = [b, a];
+      finalAnswer = a - b;
+    } else if (op.name === 'multiplication') {
+      if (props.level !== 'satuan') b = Math.floor(Math.random() * 10) + 1;
+      finalAnswer = a * b;
+    } else { // Division
+      finalAnswer = a; a = a * b; // Teknik agar hasil bagi selalu bulat
+      finalAnswer = a / b;
+    }
+    displayStr = `${a} ${op.symbol} ${b}`;
+  }
+
+  question.value = { display: displayStr, answer: finalAnswer };
+  userInput.value = '';
+  resetTimer();
+};
 
 const translateMode = (mode) => {
   const map = {
@@ -41,6 +99,15 @@ const translateMode = (mode) => {
     division: 'Pembagian'
   }
   return map[mode] || mode
+}
+const translateLevel = (level) => {
+  const map = {
+    satuan: 'Satuan',
+    puluhan: 'Puluhan',
+    ratusan: 'Ratusan',
+    berantai: 'Berantai'
+  }
+  return map[level] || level
 }
 
 const resetTimer = () => {
@@ -108,6 +175,12 @@ onUnmounted(() => clearInterval(timerInterval))
       </div>
   
       <div class="text-6xl font-black mb-8">{{ question.a }} {{ question.symbol }} {{ question.b }}</div>
+      <div :class="[
+  'font-black mb-8 text-slate-700 italic transition-all duration-300',
+  question.display.length > 10 ? 'text-3xl' : question.display.length > 6 ? 'text-5xl' : 'text-6xl'
+]">
+  {{ question.display }}
+</div>
   
       <input 
         v-model="userInput" 
@@ -121,7 +194,7 @@ onUnmounted(() => clearInterval(timerInterval))
     <div v-else class="bg-white p-10 rounded-3xl shadow-2xl text-center border-b-8 border-green-500">
       <h2 class="text-2xl font-black text-slate-800 mb-2">SESI SELESAI!</h2>
       <p class="text-slate-500 mb-6 italic">
-  Mode {{ translateMode(mode) }} - {{ level }}
+  Mode {{ translateMode(mode) }} - {{ translateLevel(level) }}
 </p>
       
       <div class="text-8xl font-black text-blue-600 mb-4">{{ score }}<span class="text-3xl text-slate-300">/10</span></div>

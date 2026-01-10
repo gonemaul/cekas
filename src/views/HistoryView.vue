@@ -19,9 +19,19 @@ const translateMode = (mode) => {
     addition: 'Penjumlahan',
     subtraction: 'Pengurangan',
     multiplication: 'Perkalian',
-    division: 'Pembagian'
+    division: 'Pembagian',
+    random: 'Campuran'
   }
   return map[mode] || mode
+}
+const translateLevel = (level) => {
+  const map = {
+    satuan: 'Satuan',
+    puluhan: 'Puluhan',
+    ratusan: 'Ratusan',
+    berantai: 'Berantai'
+  }
+  return map[level] || level
 }
 
 onMounted(() => {
@@ -75,7 +85,7 @@ const clearHistory = () => {
           <div>
             <p class="font-bold text-slate-700 text-sm">
               {{ translateMode(item.mode) }} 
-              <span class="text-slate-400 font-normal">({{ item.level }})</span>
+              <span class="text-slate-400 font-normal">({{ translateLevel(item.level) }})</span>
             </p>
             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
               {{ item.date }}
