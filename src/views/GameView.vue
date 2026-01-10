@@ -10,6 +10,8 @@ const route = useRoute()
 
 const question = ref({ display: '', answer: 0 })
 const userInput = ref('')
+const isWrong = ref(false)
+const combo = ref(0)
 const score = ref(0)
 const currentStep = ref(1)
 const timeLeft = ref(5)
@@ -177,10 +179,22 @@ const resetTimer = () => {
 }
 
 const checkAnswer = () => {
-  if (userInput.value.toString().length >= question.value.answer.toString().length) {
+  const userAnsStr = userInput.value.toString()
+  const targetAnsStr = question.value.answer.toString()
+  if (userAnsStr.length >= targetAnsStr.length) {
     if (parseInt(userInput.value) === question.value.answer) {
+      isWrong.value = false
       score.value++
+      combo.value++
       nextQuestion()
+    }else{
+      isWrong.value = true
+      combo.value = 0
+      setTimeout(() => {
+        isWrong.value = false
+        userInput.value = ""
+      }, 800)
+      userInput.value = ''
     }
   }
 }
@@ -230,52 +244,77 @@ onUnmounted(() => clearInterval(timerInterval))
 
 <template>
   <div class="max-w-md mx-auto">
-    <div
-      v-if="!isFinished"
-      class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-blue-500 text-center"
+    <div v-if="!isFinished" class="space-y-4">
+    <div class="text-center mb-2">
+      <h2 class="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">
+        {{ translateMode(props.mode) }} • {{ translateLevel(props.level) }}
+      </h2>
+    </div>
+
+    <div 
+      :class="[
+        'bg-white p-8 rounded-[2.5rem] shadow-xl border-t-8 transition-all duration-300',
+        isWrong ? 'border-red-500 animate-shake' : 'border-blue-500'
+      ]"
     >
-    <div v-if="route.query.method" class="mb-4">
-  <div class="inline-block bg-amber-100 text-amber-700 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-amber-200">
-    Latihan Khusus: {{ dbService.getLessonById(route.query.method)?.title }}
-  </div>
-</div>
-      <div class="flex justify-between items-center mb-6 text-sm font-bold text-slate-400">
-        <span>SOAL {{ currentStep }}/10</span>
-        <span class="text-red-500">{{ timeLeft.toFixed(1) }}s</span>
+      <div v-if="route.query.method" class="mb-4 flex justify-center">
+        <div class="inline-flex items-center gap-2 bg-amber-50 text-amber-700 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest border border-amber-100 shadow-sm">
+          <SparklesIcon class="w-3 h-3" />
+          Materi: {{ dbService.getLessonById(route.query.method)?.title }}
+        </div>
       </div>
 
-      <div class="w-full bg-slate-100 h-2 rounded-full mb-8 overflow-hidden">
+      <div v-if="combo > 1" class="animate-bounce text-secondary font-black text-sm">
+  🔥 {{ combo }} COMBO!
+</div>
+      <div class="flex justify-between items-center mb-6 text-sm font-black uppercase tracking-tighter">
+        <span class="text-slate-400">SOAL : <span class="text-slate-800">{{ currentStep }}</span>/10</span>
+        <span :class="timeLeft < 2 ? 'text-red-500 animate-pulse' : 'text-slate-400'">
+          {{ timeLeft.toFixed(1) }}s
+        </span>
+      </div>
+
+      <div class="w-full bg-slate-100 h-2.5 rounded-full mb-10 overflow-hidden">
         <div
-          class="bg-blue-500 h-full transition-all duration-100"
+          class="h-full transition-all duration-100 ease-linear"
+          :class="timeLeft < 2 ? 'bg-red-500' : 'bg-blue-500'"
           :style="{ width: (timeLeft / 5) * 100 + '%' }"
         ></div>
       </div>
 
-      <div class="text-6xl font-black mb-8">
-        {{ question.a }} {{ question.symbol }} {{ question.b }}
-      </div>
+      
       <div
         :class="[
-          'font-black mb-8 text-slate-700 italic transition-all duration-300',
-          question.display.length > 10
-            ? 'text-3xl'
-            : question.display.length > 6
-              ? 'text-5xl'
-              : 'text-6xl',
+          'font-black mb-10 text-slate-700 text-center italic transition-all duration-300 drop-shadow-sm',
+          question.display.length > 10 ? 'text-4xl' : 'text-6xl',
         ]"
       >
         {{ question.display }}
       </div>
 
-      <input
-        v-model="userInput"
-        @input="checkAnswer"
-        type="number"
-        class="w-full text-center text-4xl p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-blue-500 outline-none"
-        placeholder="?"
-        autofocus
-      />
+      <div class="relative">
+        <input
+          v-model="userInput"
+          @input="checkAnswer"
+          type="number"
+          inputmode="numeric"
+          :class="['w-full text-center text-5xl p-6 bg-slate-50 border-2 border-slate-100 rounded-[2rem] focus:bg-white  outline-none transition-all font-black text-slate-800', isWrong ? 'animate-shake border-red-500 focus:border-red-500' : 'focus:border-blue-500']"
+          placeholder="?"
+          ref="inputField"
+          autofocus
+        />
+        
+        <transition name="slide-up">
+  <p 
+    v-if="isWrong" 
+    class="absolute -bottom-6 left-0 right-0 text-center text-red-500 text-[10px] font-black uppercase tracking-widest"
+  >
+    Jawaban Kurang Tepat! Coba lagi...
+  </p>
+</transition>
+      </div>
     </div>
+  </div>
     <div v-else class="text-center animate-in zoom-in duration-300">
       <h2 class="text-3xl font-black text-slate-800 mb-2">SESI SELESAI!</h2>
       <p class="text-slate-500 mb-8 italic">Hasil performa Anda:</p>

@@ -14,3 +14,34 @@
         @apply bg-[var(--color-surface)] text-slate-800 antialiased;
     }
 }
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-8px);
+    }
+
+    75% {
+        transform: translateX(8px);
+    }
+}
+
+.animate-shake {
+    animation: shake 0.2s ease-in-out 0s 2;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+    transition: all 0.3s ease;
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+    transform: translateY(10px);
+    opacity: 0;
+}
