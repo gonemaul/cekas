@@ -45,7 +45,17 @@ const startGuidedPractice = () => {
         <p class="text-slate-600 leading-relaxed font-medium">
           {{ lesson.theory }}
         </p>
+        
       </div>
+      <div class="bg-blue-50 p-4 rounded-2xl border-2 border-dashed border-blue-200">
+  <div class="flex items-center gap-2 mb-1">
+    <LightBulbIcon class="w-4 h-4 text-primary" />
+    <h4 class="text-[10px] font-black text-primary uppercase tracking-widest">Pro Tip</h4>
+  </div>
+  <p class="text-xs text-slate-500 italic leading-relaxed">
+    {{ lesson.tips }}
+  </p>
+</div>
 
       <div class="bg-emerald-50 p-6 rounded-3xl border-2 border-emerald-100 relative">
         <h4 class="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">Simulasi Cepat</h4>

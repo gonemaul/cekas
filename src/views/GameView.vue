@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter,useRoute } from 'vue-router'
 import { dbService } from '@/services/dbService'
+import { generateQuestionLogic } from '@/services/questionGenerator'
 import { ClockIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps(['mode', 'level'])
@@ -34,121 +35,20 @@ const stopGameTimer = () => {
 }
 
 const generateQuestion = () => {
-  const methodId = route.query.method
-  const methodConfig = methodId ? dbService.getGameConfigByLessonId(methodId) : null
+  // Panggil logic dari file terpisah
+  const newQuestion = generateQuestionLogic(
+    props.mode, 
+    props.level, 
+    route.query.method
+  );
+
+  // Update state
+  question.value = newQuestion;
+  userInput.value = '';
   
-  let finalAnswer = 0
-  let displayStr = ''
-  if (currentStep.value === 1 && !startTime.value) {
-    startGameTimer()
-  }
-
-  if (methodId === 'trik-perkalian-11') {
-    // Trik Perkalian 11: Pastikan salah satu angka adalah 11
-    let min = 10, max = 99; // Default puluhan
-    let a = Math.floor(Math.random() * (max - min + 1)) + min;
-    let b = 11; 
-    // Acak posisi 11 agar tidak bosan
-    if (Math.random() > 0.5) [a, b] = [b, a];
-    
-    finalAnswer = a * b;
-    displayStr = `${a} × ${b}`;
-  }
-  else if (methodId === 'pembulatan-sembilan') {
-    // Trik Pembulatan 9: Pastikan angka kedua berakhiran 9
-    let a = Math.floor(Math.random() * 90) + 10;
-    let b = (Math.floor(Math.random() * 9) * 10) + 9; // Menghasilkan 9, 19, 29, ... 89
-    
-    finalAnswer = a + b;
-    displayStr = `${a} + ${b}`;
-  }
-  else {
-  // Fungsi untuk ambil operator berdasarkan pilihan Mode
-  const getOpSymbol = () => {
-    const activeMode =
-      props.mode === 'random'
-        ? ['addition', 'subtraction', 'multiplication', 'division'][Math.floor(Math.random() * 4)]
-        : props.mode
-
-    const symbols = { addition: '+', subtraction: '-', multiplication: '×', division: '÷' }
-    return { name: activeMode, symbol: symbols[activeMode] }
-  }
-
-  if (props.level === 'berantai') {
-    // --- LOGIKA BERANTAI (3-5 Angka Satuan) ---
-    const count = Math.floor(Math.random() * 3) + 3 // 3, 4, atau 5 angka
-    let currentVal = Math.floor(Math.random() * 9) + 1
-    finalAnswer = currentVal
-    displayStr = currentVal.toString()
-
-    for (let i = 1; i < count; i++) {
-      const nextVal = Math.floor(Math.random() * 9) + 1
-      const op = getOpSymbol()
-
-      // Eksekusi kalkulasi berdasarkan operator yang didapat
-      if (op.name === 'addition') {
-        finalAnswer += nextVal
-      } else if (op.name === 'subtraction') {
-        if (finalAnswer - nextVal < 0) {
-          // Proteksi hasil negatif
-          finalAnswer += nextVal
-          displayStr += ` + ${nextVal}`
-          continue
-        }
-        finalAnswer -= nextVal
-      } else if (op.name === 'multiplication') {
-        finalAnswer *= nextVal
-      } else {
-        // Division
-        if (finalAnswer % nextVal === 0 && finalAnswer !== 0) {
-          finalAnswer /= nextVal
-        } else {
-          // Jika tidak bulat, ganti jadi tambah saja
-          finalAnswer += nextVal
-          displayStr += ` + ${nextVal}`
-          continue
-        }
-      }
-      displayStr += ` ${op.symbol} ${nextVal}`
-    }
-  } else {
-    // --- LOGIKA NORMAL (2 Angka: Satuan/Puluhan/Ratusan) ---
-    let min = 1,
-      max = 9
-    if (props.level === 'puluhan') {
-      min = 10
-      max = 99
-    }
-    if (props.level === 'ratusan') {
-      min = 100
-      max = 999
-    }
-
-    let a = Math.floor(Math.random() * (max - min + 1)) + min
-    let b = Math.floor(Math.random() * (max - min + 1)) + min
-    const op = getOpSymbol()
-
-    if (op.name === 'addition') {
-      finalAnswer = a + b
-    } else if (op.name === 'subtraction') {
-      if (a < b) [a, b] = [b, a]
-      finalAnswer = a - b
-    } else if (op.name === 'multiplication') {
-      if (props.level !== 'satuan') b = Math.floor(Math.random() * 10) + 1
-      finalAnswer = a * b
-    } else {
-      // Division
-      finalAnswer = a
-      a = a * b // Teknik agar hasil bagi selalu bulat
-      finalAnswer = a / b
-    }
-    displayStr = `${a} ${op.symbol} ${b}`
-  }}
-
-  question.value = { display: displayStr, answer: finalAnswer }
-  userInput.value = ''
-  resetTimer()
-}
+  if (currentStep.value === 1 && !startTime.value) startGameTimer();
+  resetTimer();
+};
 
 const translateMode = (mode) => {
   const map = {
