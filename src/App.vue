@@ -1,7 +1,5 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { APP_IDENTITY } from '@/constants/appConfig'
-import AppHeader from '@/components/AppHeader.vue'
 
 const screen = ref('menu') // menu, game, history
 const settings = reactive({
@@ -27,16 +25,16 @@ onMounted(loadHistory)
 
 <template>
   <div class="max-w-xl mx-auto min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans">
-    <AppHeader />
+    <!-- <AppHeader /> -->
 
-    <main class="flex-grow p-4 mt-6">
+    <main class="flex-grow p-4">
       <RouterView />
     </main>
 
-    <footer class="p-8 text-center border-t border-slate-100">
+    <!-- <footer class="p-8 text-center border-t border-slate-100">
       <p class="text-[11px] text-slate-400 font-medium italic">
         &copy; {{ new Date().getFullYear() }} {{ APP_IDENTITY.copyright }}
       </p>
-    </footer>
+    </footer> -->
   </div>
 </template>

@@ -11,6 +11,8 @@ import {
   SparklesIcon,
   ClockIcon,
 } from '@heroicons/vue/24/outline'
+import AppHeader from '@/components/AppHeader.vue'
+import { APP_IDENTITY } from '@/constants/appConfig'
 
 const router = useRouter()
 const step = ref(1)
@@ -92,6 +94,7 @@ const startGame = (timeLimit) => {
 </script>
 
 <template>
+  <AppHeader class="mb-8" />
   <div class="space-y-6">
     <button
       v-if="step > 1"
@@ -202,4 +205,9 @@ const startGame = (timeLimit) => {
       </button>
     </div>
   </div>
+  <footer class="p-8 text-center border-t border-slate-100">
+    <p class="text-[11px] text-slate-400 font-medium italic">
+      &copy; {{ new Date().getFullYear() }} {{ APP_IDENTITY.copyright }}
+    </p>
+  </footer>
 </template>
