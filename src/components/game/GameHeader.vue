@@ -4,6 +4,7 @@ import { TrophyIcon, ClockIcon, HeartIcon, Squares2X2Icon } from '@heroicons/vue
 defineProps({
   mode: String,
   level: String,
+  diff: String,
   currentStep: Number,
   timeLeft: Number,
   timeLimit: Number,
@@ -22,11 +23,15 @@ defineProps({
         </span>
       </div>
 
-      <div class="flex items-center gap-1.5 text-slate-400">
+      <div
+        class="flex items-center gap-1.5 font-black uppercase tracking-wider italic text-[9px] text-slate-400"
+      >
         <Squares2X2Icon class="w-3 h-3" />
-        <span class="text-[9px] font-black uppercase tracking-[0.15em] italic">
-          {{ mode }} <span class="text-slate-200 mx-0.5">•</span> {{ level }}
-        </span>
+        <span class="text-slate-500">{{ mode }}</span>
+        <span class="opacity-30">/</span>
+        <span class="text-slate-500">{{ level }}</span>
+        <span v-if="diff" class="opacity-30">/</span>
+        <span v-if="diff" class="text-slate-500">{{ diff }}</span>
       </div>
     </div>
 
@@ -60,7 +65,9 @@ defineProps({
           ]"
         >
           <ClockIcon v-if="timeLimit" class="w-3 h-3" />
-          <span class="text-[11px] font-black tracking-widest">{{ timeLimit ? timeLeft.toFixed(1) + 's': '∞' }}</span>
+          <span class="text-[11px] font-black tracking-widest">{{
+            timeLimit ? timeLeft.toFixed(1) + 's' : '∞'
+          }}</span>
         </div>
         <div class="w-full max-w-[100px] bg-slate-100 h-1.5 rounded-full overflow-hidden">
           <div

@@ -3,14 +3,16 @@ export const StorageService = {
     const history = JSON.parse(localStorage.getItem('fastmath_history') || '[]')
     const lastSession = history[0]
 
-    let status = 'NEW'
-    if (lastSession) {
-      status =
-        payload.score > lastSession.score
-          ? 'UP'
-          : payload.score < lastSession.score
-            ? 'DOWN'
-            : 'STABLE'
+    let status = 'FAILED'
+    if (payload.status === 'SUCCESS') {
+      if (lastSession) {
+        status =
+          payload.score > lastSession.score
+            ? 'UP'
+            : payload.score < lastSession.score
+              ? 'DOWN'
+              : 'STABLE'
+      }
     }
 
     const newEntry = {

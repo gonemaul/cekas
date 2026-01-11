@@ -7,31 +7,22 @@ defineProps({
 })
 </script>
 <template>
+  <div
+    :class="[
+      'fixed inset-0 pointer-events-none z-50 transition-opacity duration-300',
+
+      (timeLeft < 2 && timeLimit && !isFinished) || isWrong ? 'opacity-100' : 'opacity-0',
+    ]"
+    style="background: radial-gradient(circle, transparent 40%, rgba(239, 68, 68, 0.15) 100%)"
+  >
     <div
-
-      :class="[
-
-        'fixed inset-0 pointer-events-none z-50 transition-opacity duration-300',
-
-        timeLeft < 2 && timeLimit && !isFinished || isWrong ? 'opacity-100' : 'opacity-0',
-
-      ]"
-
-      style="background: radial-gradient(circle, transparent 40%, rgba(239, 68, 68, 0.15) 100%)"
-
-    >
-
-      <div
-
-        v-if="isWrong"
-
-        class="absolute inset-0 bg-red-500/30 backdrop-blur-[1px] animate-flash"
-
-      ></div>
-      </div>
+      v-if="isWrong"
+      class="absolute inset-0 bg-red-500/30 backdrop-blur-[1px] animate-flash"
+    ></div>
+  </div>
 </template>
 <style scoped>
-  @keyframes breathe {
+@keyframes breathe {
   0%,
   100% {
     opacity: 0.3;

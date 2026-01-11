@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { GAME_CONFIG } from '@/constants/GameConfig'
 import { dbService } from '@/services/dbService'
@@ -8,14 +8,14 @@ import { QuestionEngine } from '@/services/QuestionEngine'
 import { GameEngine } from '@/services/GameEngine'
 import { StorageService } from '@/services/StorageService'
 import { useTimer } from '@/composables/useTimer'
-import { audioService } from '@/services/AudioService';
+import { audioService } from '@/services/AudioService'
 
 // Components
 import GameHeader from '@/components/game/GameHeader.vue'
 import GameStage from '@/components/game/QuestionStage.vue'
 import Keypad from '@/components/game/Keypad.vue'
-import FinishView from '@/components/FinishView.vue'
 import VisualAlert from '@/components/game/VisualAlert.vue'
+import ResultOverlay from '@/components/game/ResultOverlay.vue'
 
 const props = defineProps(['mode', 'level'])
 const route = useRoute()
@@ -38,14 +38,14 @@ const lives = ref(3)
 const combo = ref(0)
 const currentStep = ref(1)
 const isFinished = ref(false)
+const isGameOver = ref(false)
 const isWrong = ref(false)
 const startTime = ref(null)
 const totalTimeSpent = ref(0)
-const modeInfo = GAME_CONFIG.getModeById(props.mode); 
-const levelInfo = GAME_CONFIG.getLevelById(route.level);
-const diffInfo = GAME_CONFIG.getDiffById(route.query.timer);
-const timeLimit = diffInfo?.time; 
-
+const modeInfo = GAME_CONFIG.getModeById(props.mode)
+const levelInfo = GAME_CONFIG.getLevelById(props.level)
+const diffInfo = GAME_CONFIG.getDiffById(route.query.timer)
+const timeLimit = diffInfo?.time
 // --- COMPOSABLES ---
 const { inputField, forceFocus, handleKeyPress, handleClear } = useKeyboard(userInput)
 const { timeLeft, start: startTimer, stop: stopTimer } = useTimer(timeLimit)
@@ -61,19 +61,23 @@ const generateNewQuestion = () => {
 const checkAnswer = () => {
   if (QuestionEngine.isInputFull(userInput.value, question.value.answer)) {
     const isCorrect = QuestionEngine.isCorrect(userInput.value, question.value.answer)
-    const result = GameEngine.updateStats(isCorrect, { score: score.value, lives: lives.value, combo: combo.value })
-    
+    const result = GameEngine.updateStats(isCorrect, {
+      score: score.value,
+      lives: lives.value,
+      combo: combo.value,
+    })
+
     score.value = result.score
     lives.value = result.lives
     combo.value = result.combo
     isWrong.value = result.isWrong
 
     if (isCorrect) {
-      audioService.play('success');
+      audioService.play('success')
       nextStep()
     } else {
-      audioService.play('wrong');
-      if (lives.value <= 0) return finishGame()
+      audioService.play('wrong')
+      if (lives.value <= 0) return finishGame('gameover')
       setTimeout(() => {
         isWrong.value = false
         userInput.value = ''
@@ -83,7 +87,7 @@ const checkAnswer = () => {
 }
 
 const nextStep = () => {
-  const isInfinite = route.query.timer === 'survive';
+  const isInfinite = route.query.timer === 'survive'
   if (isInfinite || currentStep.value < GAME_CONFIG.SETTINGS.TOTAL_STEPS) {
     currentStep.value++
     generateNewQuestion()
@@ -95,25 +99,36 @@ const nextStep = () => {
 
 const handleTimeout = () => {
   lives.value--
-  if (lives.value <= 0) finishGame()
+  if (lives.value <= 0) finishGame('gameover')
   else nextStep()
 }
 
-const finishGame = () => {
+const averageTimePerQuestion = computed(() => {
+  if (currentStep.value === 0) return 0
+  // Menghitung rata-rata dengan satu angka di belakang koma
+  return parseFloat((totalTimeSpent.value / currentStep.value).toFixed(1))
+})
+
+const finishGame = (status = 'finish') => {
   stopTimer()
+  isFinished.value = true
+  isGameOver.value = status === 'gameover'
   if (startTime.value) {
     totalTimeSpent.value = Math.floor((Date.now() - startTime.value) / 1000)
   }
   isFinished.value = true
-  
+
   StorageService.saveHistory({
-    mode: modeInfo?.label || props.mode,
-    level: levelInfo?.label || props.level,
+    mode: modeInfo?.name || props.mode,
+    level: levelInfo?.name || props.level,
     score: score.value,
-    time: totalTimeSpent.value
+    time: totalTimeSpent.value,
+    status: isGameOver.value ? 'FAILED' : 'SUCCESS',
   })
 }
 
+const handleRetry = () => window.location.reload()
+const handleHome = () => router.push('/')
 // Event Handlers untuk Keypad.vue
 const pressKey = (num) => handleKeyPress(num, checkAnswer)
 const clearInput = () => handleClear()
@@ -141,15 +156,16 @@ onUnmounted(() => {
       v-if="!isFinished"
       class="h-screen max-h-screen flex flex-col bg-gray-100 shadow-lg rounded-2xl overflow-hidden font-sans relative"
     >
-   
-    <VisualAlert
-    :timeLimit="timeLimit"
+      <VisualAlert
+        :timeLimit="timeLimit"
         :timeLeft="timeLeft"
         :isFinished="isFinished"
-        :isWrong="isWrong"/>
+        :isWrong="isWrong"
+      />
       <GameHeader
-        :mode="modeInfo?.label || props.mode"
-        :level="levelInfo?.label || props.level"
+        :mode="modeInfo?.name || props.mode"
+        :level="levelInfo?.name || props.level"
+        :diff="diffInfo?.label"
         :currentStep="currentStep"
         :timeLeft="timeLeft"
         :timeLimit="timeLimit"
@@ -196,11 +212,23 @@ onUnmounted(() => {
         class="opacity-0 absolute -z-10"
       />
     </div>
-    <FinishView v-else :score="score" :totalTimeSpent="totalTimeSpent" />
+    <ResultOverlay
+      v-if="isFinished"
+      :isGameOver="isGameOver"
+      :score="score"
+      :totalTime="totalTimeSpent"
+      :avgTime="averageTimePerQuestion"
+      :accuracy="Math.round((score / currentStep) * 100)"
+      :mode="modeInfo?.name"
+      :level="levelInfo?.name"
+      :diff="diffInfo?.label"
+      @retry="handleRetry"
+      @home="handleHome"
+    />
   </div>
 </template>
 <style scoped>
-    @keyframes breathe {
+@keyframes breathe {
   0%,
   100% {
     opacity: 0.3;
