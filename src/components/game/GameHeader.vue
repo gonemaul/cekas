@@ -47,7 +47,7 @@ defineProps({
             currentStep
           }}</span>
           <span class="text-[10px] font-bold text-slate-300 uppercase tracking-tighter"
-            >/ 10 SOAL</span
+            >/ {{ timeLimit ? '10 SOAL' : '∞' }}</span
           >
         </div>
       </div>
@@ -56,11 +56,11 @@ defineProps({
         <div
           :class="[
             'flex items-center gap-1 tabular-nums',
-            timeLeft < 3 ? 'text-red-500 animate-pulse' : 'text-slate-400',
+            timeLeft < 3 && timeLimit ? 'text-red-500 animate-pulse' : 'text-slate-400',
           ]"
         >
-          <ClockIcon class="w-3 h-3" />
-          <span class="text-[11px] font-black tracking-widest">{{ timeLeft.toFixed(1) }}s</span>
+          <ClockIcon v-if="timeLimit" class="w-3 h-3" />
+          <span class="text-[11px] font-black tracking-widest">{{ timeLimit ? timeLeft.toFixed(1) + 's': '∞' }}</span>
         </div>
         <div class="w-full max-w-[100px] bg-slate-100 h-1.5 rounded-full overflow-hidden">
           <div

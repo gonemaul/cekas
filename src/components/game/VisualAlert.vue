@@ -1,5 +1,6 @@
 <script setup>
 defineProps({
+  timeLimit: Number,
   timeLeft: Number,
   isFinished: Boolean,
   isWrong: Boolean,
@@ -12,7 +13,7 @@ defineProps({
 
         'fixed inset-0 pointer-events-none z-50 transition-opacity duration-300',
 
-        timeLeft < 2 && !isFinished ? 'opacity-100' : 'opacity-0',
+        timeLeft < 2 && timeLimit && !isFinished || isWrong ? 'opacity-100' : 'opacity-0',
 
       ]"
 

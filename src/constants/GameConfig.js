@@ -70,6 +70,13 @@ export const GAME_CONFIG = {
     },
     { id: 'normal', label: 'Normal', time: 5, color: 'bg-blue-500', desc: 'Standar Cekas' },
     { id: 'kilat', label: 'Kilat', time: 3, color: 'bg-red-500', desc: 'Uji Refleks Otak' },
+    {
+      id: 'survive',
+      label: 'Survive',
+      time: null,
+      color: 'bg-red-500',
+      desc: 'Uji Seberapa Kuat Otak Kamu',
+    },
   ],
 
   SETTINGS: {

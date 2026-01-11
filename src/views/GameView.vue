@@ -43,7 +43,7 @@ const totalTimeSpent = ref(0)
 const modeInfo = GAME_CONFIG.getModeById(props.mode); 
 const levelInfo = GAME_CONFIG.getLevelById(route.level);
 const diffInfo = GAME_CONFIG.getDiffById(route.query.timer);
-const timeLimit = diffInfo.time; 
+const timeLimit = diffInfo?.time; 
 
 // --- COMPOSABLES ---
 const { inputField, forceFocus, handleKeyPress, handleClear } = useKeyboard(userInput)
@@ -80,7 +80,8 @@ const checkAnswer = () => {
 }
 
 const nextStep = () => {
-  if (currentStep.value < GAME_CONFIG.SETTINGS.TOTAL_STEPS) {
+  const isInfinite = route.query.timer === 'survive';
+  if (isInfinite || currentStep.value < GAME_CONFIG.SETTINGS.TOTAL_STEPS) {
     currentStep.value++
     generateNewQuestion()
     forceFocus()
@@ -139,6 +140,7 @@ onUnmounted(() => {
     >
    
     <VisualAlert
+    :timeLimit="timeLimit"
         :timeLeft="timeLeft"
         :isFinished="isFinished"
         :isWrong="isWrong"/>

@@ -134,7 +134,7 @@ const startGame = (timeLimit) => {
           <div
             class="text-2xl font-black text-amber-500 bg-amber-50 w-14 h-14 rounded-2xl flex items-center justify-center border border-amber-100"
           >
-            {{ diff.time }}s
+            {{ diff.time ? diff.time + 's' : '∞' }}
           </div>
         </button>
       </div>
