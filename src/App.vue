@@ -27,7 +27,7 @@ onMounted(loadHistory)
   <div class="max-w-xl mx-auto min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans">
     <!-- <AppHeader /> -->
 
-    <main class="flex-grow p-4">
+    <main class="flex-grow">
       <RouterView />
     </main>
 

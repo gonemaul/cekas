@@ -25,7 +25,7 @@ const themeColor = computed(() => (props.isGameOver ? 'text-red-600' : 'text-eme
 
 <template>
   <div
-    class="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-slate-900/90 backdrop-blur-md"
+    class="fixed inset-0 z-[200] p-4 flex items-center justify-center p-6 bg-slate-900/90 backdrop-blur-md"
   >
     <div
       class="w-full max-w-md bg-white rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300"

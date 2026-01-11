@@ -49,7 +49,7 @@ const startGame = (timeLimit) => {
 
 <template>
   <AppHeader class="mb-8" />
-  <div class="space-y-6">
+  <div class="space-y-6 p-4">
     <button
       v-if="step > 1"
       @click="step--"

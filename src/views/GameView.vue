@@ -151,7 +151,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="max-w-xl mx-auto h-screen w-screen overflow-hidden">
+  <div class="max-w-xl h-screen overflow-hidden">
     <div
       v-if="!isFinished"
       class="h-screen max-h-screen flex flex-col bg-gray-100 shadow-lg rounded-2xl overflow-hidden font-sans relative"
