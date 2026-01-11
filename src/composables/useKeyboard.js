@@ -1,4 +1,5 @@
 import { ref, nextTick } from 'vue'
+import { audioService } from '@/services/AudioService'
 
 export function useKeyboard(userInputRef) {
   const inputField = ref(null)
@@ -15,7 +16,7 @@ export function useKeyboard(userInputRef) {
   // Handler untuk Custom Keypad (Layar)
   const handleKeyPress = (num, callback) => {
     userInputRef.value += num.toString()
-
+    audioService.play('click')
     // Haptic feedback (Hanya Android/Chrome Mobile)
     if ('vibrate' in navigator) navigator.vibrate(15)
 

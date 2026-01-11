@@ -8,6 +8,7 @@ import { QuestionEngine } from '@/services/QuestionEngine'
 import { GameEngine } from '@/services/GameEngine'
 import { StorageService } from '@/services/StorageService'
 import { useTimer } from '@/composables/useTimer'
+import { audioService } from '@/services/AudioService';
 
 // Components
 import GameHeader from '@/components/game/GameHeader.vue'
@@ -68,8 +69,10 @@ const checkAnswer = () => {
     isWrong.value = result.isWrong
 
     if (isCorrect) {
+      audioService.play('success');
       nextStep()
     } else {
+      audioService.play('wrong');
       if (lives.value <= 0) return finishGame()
       setTimeout(() => {
         isWrong.value = false
