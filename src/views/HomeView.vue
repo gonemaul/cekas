@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { GAME_CONFIG } from '@/constants/GameConfig'
 import {
   PlusIcon,
   MinusIcon,
@@ -19,56 +20,9 @@ const step = ref(1)
 const selectedMode = ref('')
 const selectedLevel = ref('')
 
-const modes = [
-  {
-    id: 'addition',
-    name: 'Penjumlahan',
-    desc: 'Asah kecepatan totalitas angka.',
-    icon: PlusIcon,
-    color: 'bg-blue-500',
-  },
-  {
-    id: 'subtraction',
-    name: 'Pengurangan',
-    desc: 'Latih ketelitian selisih nilai.',
-    icon: MinusIcon,
-    color: 'bg-emerald-500',
-  },
-  {
-    id: 'multiplication',
-    name: 'Perkalian',
-    desc: 'Tingkatkan daya ingat kelipatan.',
-    icon: XMarkIcon,
-    color: 'bg-amber-500',
-  },
-  {
-    id: 'division',
-    name: 'Pembagian',
-    desc: 'Uji logika distribusi angka.',
-    icon: VariableIcon,
-    color: 'bg-indigo-500',
-  },
-  {
-    id: 'random',
-    name: 'Campuran',
-    desc: 'Tantangan otak multifungsi.',
-    icon: SparklesIcon,
-    color: 'bg-rose-500',
-  },
-]
-
-const levels = [
-  { id: 'satuan', name: 'Satuan', desc: 'Angka 1-9' },
-  { id: 'puluhan', name: 'Puluhan', desc: 'Angka 10-99' },
-  { id: 'ratusan', name: 'Ratusan', desc: 'Angka 100-999' },
-  { id: 'berantai', name: 'Berantai', desc: '3-5 Angka Acak' },
-]
-
-const difficulties = [
-  { id: 8, label: 'Santai', time: 8, color: 'bg-emerald-500', desc: 'Cocok untuk Belajar' },
-  { id: 5, label: 'Normal', time: 5, color: 'bg-blue-500', desc: 'Standar FastMath' },
-  { id: 3, label: 'Kilat', time: 3, color: 'bg-red-500', desc: 'Uji Refleks Otak' },
-]
+const modes = GAME_CONFIG.MODES
+const levels = GAME_CONFIG.LEVELS
+const difficulties = GAME_CONFIG.DIFFICULTIES
 
 // Fungsi Navigasi State
 const handleSelectMode = (id) => {

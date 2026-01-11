@@ -4,6 +4,7 @@ defineProps({
   userInput: String,
   isWrong: Boolean,
   combo: Number,
+  showKeypad: Boolean,
   methodTitle: String,
 })
 </script>
@@ -23,6 +24,7 @@ defineProps({
       :class="[
         'font-black text-slate-800 tracking-tighter italic leading-none transition-all duration-300 mb-6',
         display.length > 8 ? 'text-6xl' : 'text-8xl',
+        showKeypad ? 'text-4xl' : 'text-6xl',
         isWrong ? 'text-red-600 scale-95' : '',
       ]"
     >

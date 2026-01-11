@@ -1,202 +1,133 @@
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { GAME_CONFIG } from '@/constants/GameConfig'
 import { dbService } from '@/services/dbService'
-import { generateQuestionLogic } from '@/services/questionGenerator'
-import FinishView from '@/components/FinishView.vue'
-import Keypad from '@/components/game/Keypad.vue'
+import { useKeyboard } from '@/composables/useKeyboard'
+import { QuestionEngine } from '@/services/QuestionEngine'
+import { GameEngine } from '@/services/GameEngine'
+import { StorageService } from '@/services/StorageService'
+import { useTimer } from '@/composables/useTimer'
+
+// Components
 import GameHeader from '@/components/game/GameHeader.vue'
 import GameStage from '@/components/game/QuestionStage.vue'
+import Keypad from '@/components/game/Keypad.vue'
+import FinishView from '@/components/FinishView.vue'
+import VisualAlert from '@/components/game/VisualAlert.vue'
 
 const props = defineProps(['mode', 'level'])
 const route = useRoute()
 
+// --- RESPONSIVE LOGIC ---
 const isMobile = ref(false)
-const showKeypad = ref(true) // Opsi manual dari user
-const inputField = ref(null)
-
-const question = ref({ display: '', answer: 0 })
-const userInput = ref('')
-const score = ref(0)
-const currentStep = ref(1)
-const isFinished = ref(false)
-const isWrong = ref(false)
-const combo = ref(0)
-const lives = ref(3)
-// Ambil timer dari query (misal: 3, 5, atau 8). Default ke 5 jika tidak ada.
-const timeLimit = ref(parseFloat(route.query.timer) || 5)
-const timeLeft = ref(timeLimit.value)
-const startTime = ref(null)
-const totalTimeSpent = ref(0)
-let timerInterval = null
+const showKeypad = ref(true)
 
 const checkDevice = () => {
   isMobile.value = window.innerWidth < 768
-  // Jika desktop, otomatis sembunyikan custom keypad agar bisa pakai keyboard fisik
-  showKeypad.value = isMobile.value
+  // Jika desktop dan user belum set manual, default sembunyikan keypad
+  if (!isMobile.value) showKeypad.value = false
 }
 
-const focusInput = () => {
-  nextTick(() => {
-    if (!showKeypad.value && inputField.value) {
-      inputField.value.focus()
-    }
-  })
-}
-// Panggil ini saat game pertama kali dimulai (soal nomor 1)
-const startGameTimer = () => {
-  startTime.value = Date.now()
-}
+// --- STATE ---
+const question = ref({ display: '', answer: 0 })
+const userInput = ref('')
+const score = ref(0)
+const lives = ref(3)
+const combo = ref(0)
+const currentStep = ref(1)
+const isFinished = ref(false)
+const isWrong = ref(false)
+const startTime = ref(null)
+const totalTimeSpent = ref(0)
+const modeInfo = GAME_CONFIG.getModeById(props.mode); 
+const levelInfo = GAME_CONFIG.getLevelById(route.level);
+const diffInfo = GAME_CONFIG.getDiffById(route.query.timer);
+const timeLimit = diffInfo.time; 
 
-// Panggil ini saat soal ke-10 dijawab
-const stopGameTimer = () => {
-  if (startTime.value) {
-    const endTime = Date.now()
-    totalTimeSpent.value = Math.floor((endTime - startTime.value) / 1000)
-  }
-}
+// --- COMPOSABLES ---
+const { inputField, forceFocus, handleKeyPress, handleClear } = useKeyboard(userInput)
+const { timeLeft, start: startTimer, stop: stopTimer } = useTimer(timeLimit)
 
-const resetTimer = () => {
-  timeLeft.value = timeLimit.value
-  clearInterval(timerInterval)
-  timerInterval = setInterval(() => {
-    timeLeft.value -= 0.1
-    if (timeLeft.value <= 0) nextQuestion()
-  }, 100)
-}
-
-const toggleKeypad = () => {
-  showKeypad.value = !showKeypad.value
-  // Jika dimatikan, paksa fokus kembali ke input fisik (Desktop)
-  if (!showKeypad.value) {
-    setTimeout(() => inputField.value?.focus(), 100)
-  }
-}
-
-const translateMode = (mode) => {
-  const map = {
-    addition: 'Penjumlahan',
-    subtraction: 'Pengurangan',
-    multiplication: 'Perkalian',
-    division: 'Pembagian',
-  }
-  return map[mode] || mode
-}
-const translateLevel = (level) => {
-  const map = {
-    satuan: 'Satuan',
-    puluhan: 'Puluhan',
-    ratusan: 'Ratusan',
-    berantai: 'Berantai',
-  }
-  return map[level] || level
-}
-
-const generateQuestion = () => {
-  // Panggil logic dari file terpisah
-  const newQuestion = generateQuestionLogic(props.mode, props.level, route.query.method)
-
-  // Update state
-  question.value = newQuestion
+// --- CORE METHODS ---
+const generateNewQuestion = () => {
+  question.value = QuestionEngine.generate(props.mode, props.level, route.query.method)
   userInput.value = ''
-
-  if (currentStep.value === 1 && !startTime.value) startGameTimer()
-  resetTimer()
+  if (currentStep.value === 1 && !startTime.value) startTime.value = Date.now()
+  startTimer(handleTimeout)
 }
 
-const pressKey = (num) => {
-  if (isWrong.value) isWrong.value = false // Reset status salah saat mulai ngetik lagi
-  userInput.value += num.toString()
-  // Haptic feedback (Hanya di Android/Chrome Mobile)
-  if ('vibrate' in navigator) navigator.vibrate(15)
-  // Panggil fungsi checkAnswer asli kamu
-  checkAnswer()
-}
-const clearInput = () => {
-  userInput.value = ''
-  if (isWrong.value) isWrong.value = false
-}
 const checkAnswer = () => {
-  const userAnsStr = userInput.value.toString()
-  const targetAnsStr = question.value.answer.toString()
-  if (userAnsStr.length >= targetAnsStr.length) {
-    if (parseInt(userInput.value) === question.value.answer) {
-      isWrong.value = false
-      score.value++
-      combo.value++
-      nextQuestion()
+  if (QuestionEngine.isInputFull(userInput.value, question.value.answer)) {
+    const isCorrect = QuestionEngine.isCorrect(userInput.value, question.value.answer)
+    const result = GameEngine.updateStats(isCorrect, { score: score.value, lives: lives.value, combo: combo.value })
+    
+    score.value = result.score
+    lives.value = result.lives
+    combo.value = result.combo
+    isWrong.value = result.isWrong
+
+    if (isCorrect) {
+      nextStep()
     } else {
-      lives.value--
-      isWrong.value = true
-      combo.value = 0
-      if (lives.value <= 0) {
-        gameOver() // Panggil fungsi selesai
-      }
+      if (lives.value <= 0) return finishGame()
       setTimeout(() => {
         isWrong.value = false
         userInput.value = ''
       }, 800)
-      userInput.value = ''
     }
   }
 }
 
-const nextQuestion = () => {
-  if (currentStep.value < 10) {
+const nextStep = () => {
+  if (currentStep.value < GAME_CONFIG.SETTINGS.TOTAL_STEPS) {
     currentStep.value++
-    generateQuestion()
-    focusInput()
+    generateNewQuestion()
+    forceFocus()
   } else {
     finishGame()
   }
 }
 
-const saveHistory = () => {
-  const history = JSON.parse(localStorage.getItem('fastmath_history') || '[]')
-  const lastSession = history[0]
-
-  let status = 'NEW'
-  if (lastSession) {
-    status =
-      score.value > lastSession.score ? 'UP' : score.value < lastSession.score ? 'DOWN' : 'STABLE'
-  }
-  const newEntry = {
-    id: Date.now(),
-    mode: props.mode,
-    level: props.level,
-    score: score.value,
-    time: totalTimeSpent.value, // Simpan waktu dalam detik
-    date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
-    status: status,
-  }
-
-  history.unshift(newEntry)
-  localStorage.setItem('fastmath_history', JSON.stringify(history.slice(0, 10)))
+const handleTimeout = () => {
+  lives.value--
+  if (lives.value <= 0) finishGame()
+  else nextStep()
 }
 
 const finishGame = () => {
-  clearInterval(timerInterval)
-  stopGameTimer()
+  stopTimer()
+  if (startTime.value) {
+    totalTimeSpent.value = Math.floor((Date.now() - startTime.value) / 1000)
+  }
   isFinished.value = true
-  saveHistory()
+  
+  StorageService.saveHistory({
+    mode: modeInfo?.label || props.mode,
+    level: levelInfo?.label || props.level,
+    score: score.value,
+    time: totalTimeSpent.value
+  })
 }
 
+// Event Handlers untuk Keypad.vue
+const pressKey = (num) => handleKeyPress(num, checkAnswer)
+const clearInput = () => handleClear()
+
+// --- LIFECYCLE ---
 onMounted(() => {
-  generateQuestion()
-  focusInput()
   checkDevice()
+  generateNewQuestion()
   window.addEventListener('resize', checkDevice)
-  setTimeout(focusInput, 500)
-  window.addEventListener('click', focusInput)
+  window.addEventListener('click', forceFocus)
   window.addEventListener('keydown', (e) => {
-    if (!showKeypad.value) focusInput()
+    if (e.key >= '0' && e.key <= '9') forceFocus()
   })
 })
+
 onUnmounted(() => {
-  clearInterval(timerInterval)
   window.removeEventListener('resize', checkDevice)
-  window.removeEventListener('click', focusInput)
-  window.removeEventListener('keydown', focusInput)
+  window.removeEventListener('click', forceFocus)
 })
 </script>
 
@@ -206,28 +137,14 @@ onUnmounted(() => {
       v-if="!isFinished"
       class="h-screen max-h-screen flex flex-col bg-gray-100 shadow-lg rounded-2xl overflow-hidden font-sans relative"
     >
-      <div
-        :class="[
-          'fixed inset-y-0 left-0 w-1 z-[60] transition-all duration-500',
-          timeLeft < 2 && !isFinished
-            ? 'shadow-[15px_0_30px_rgba(239,68,68,0.3)] bg-red-500/20'
-            : 'shadow-none bg-transparent',
-          isWrong ? 'shadow-[30px_0_50px_rgba(239,68,68,0.5)] bg-red-600/40' : '',
-        ]"
-      ></div>
-
-      <div
-        :class="[
-          'fixed inset-y-0 right-0 w-1 z-[60] transition-all duration-500',
-          timeLeft < 2 && !isFinished
-            ? 'shadow-[-15px_0_30px_rgba(239,68,68,0.3)] bg-red-500/20'
-            : 'shadow-none bg-transparent',
-          isWrong ? 'shadow-[-30px_0_50px_rgba(239,68,68,0.5)] bg-red-600/40' : '',
-        ]"
-      ></div>
+   
+    <VisualAlert
+        :timeLeft="timeLeft"
+        :isFinished="isFinished"
+        :isWrong="isWrong"/>
       <GameHeader
-        :mode="translateMode(props.mode)"
-        :level="translateLevel(props.level)"
+        :mode="modeInfo?.label || props.mode"
+        :level="levelInfo?.label || props.level"
         :currentStep="currentStep"
         :timeLeft="timeLeft"
         :timeLimit="timeLimit"
@@ -246,6 +163,7 @@ onUnmounted(() => {
           :userInput="userInput"
           :isWrong="isWrong"
           :combo="combo"
+          :showKeypad="showKeypad"
           :methodTitle="dbService.getLessonById(route.query.method)?.title"
         />
 
@@ -274,22 +192,10 @@ onUnmounted(() => {
       />
     </div>
     <FinishView v-else :score="score" :totalTimeSpent="totalTimeSpent" />
-    <div
-      :class="[
-        'fixed inset-0 pointer-events-none z-50 transition-opacity duration-300',
-        timeLeft < 2 && !isFinished ? 'opacity-100' : 'opacity-0',
-      ]"
-      style="background: radial-gradient(circle, transparent 40%, rgba(239, 68, 68, 0.15) 100%)"
-    >
-      <div
-        v-if="isWrong"
-        class="absolute inset-0 bg-red-500/30 backdrop-blur-[1px] animate-flash"
-      ></div>
-    </div>
   </div>
 </template>
 <style scoped>
-@keyframes breathe {
+    @keyframes breathe {
   0%,
   100% {
     opacity: 0.3;
@@ -307,7 +213,6 @@ onUnmounted(() => {
 .transition-all {
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 @keyframes shake-screen {
   0%,
   100% {
