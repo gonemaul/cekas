@@ -2,7 +2,7 @@ export const APP_IDENTITY = {
   name: 'Cekas',
   fullName: 'Cekas Arithmetic',
   slogan: 'Tangkas Berhitung, Cerdas Menalar',
-  version: 'v1.7.0-beta', // Update v 1.7 pwa
+  version: 'v1.7.1-beta', // Update v 1.7 pwa
   release_name: 'PWA Stability',
   storage_key: 'cekas_history_v1',
   copyright: 'Cekas Digital Indonesia',
