@@ -45,6 +45,20 @@ const startGame = (timeLimit) => {
     query: { timer: timeLimit },
   })
 }
+
+// opsi install
+const installPrompt = ref(null);
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  installPrompt.value = e;
+});
+const installApp = async () => {
+  if (!installPrompt.value) return;
+  installPrompt.value.prompt();
+  const { outcome } = await installPrompt.value.userChoice;
+  if (outcome === 'accepted') installPrompt.value = null;
+};
 </script>
 
 <template>
