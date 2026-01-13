@@ -31,7 +31,7 @@ const handleClear = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto">
+  <div class="min-h-screen bg-slate-50 flex flex-col">
     <AppHeader :showBack="true" backRoute="/" title="RIWAYAT" subtitle="PENCAPAIAN KAMU" />
 
     <main class="flex-1 p-6 space-y-6">

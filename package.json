@@ -1,6 +1,6 @@
 {
   "name": "cekas_arithmetic",
-  "version": "1.7.0",
+  "version": "1.8.4",
   "private": true,
   "type": "module",
   "engines": {
@@ -23,6 +23,7 @@
     "@vitejs/plugin-vue": "^6.0.3",
     "prettier": "3.7.4",
     "vite": "^7.3.0",
+    "vite-plugin-compression": "^0.5.1",
     "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-vue-devtools": "^8.0.5"
   }

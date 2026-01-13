@@ -28,7 +28,7 @@ const startGuidedPractice = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto relative overflow-x-hidden">
+  <div class="min-h-screen bg-slate-50 flex flex-col">
     <AppHeader :showBack="true" backRoute="/learn" title="DETAIL MATERI" subtitle="TEKNIK ARITMATIKA"/>
 
     <main v-if="lesson" class="flex-1 p-6 space-y-8 animate-in fade-in zoom-in-95 duration-300">

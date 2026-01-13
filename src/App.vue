@@ -24,17 +24,13 @@ onMounted(loadHistory)
 </script>
 
 <template>
-  <div class="max-w-xl mx-auto min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans">
-    <!-- <AppHeader /> -->
-
-    <!-- <main class="flex-grow">
-      <RouterView />
-    </main> -->
-    <router-view v-slot="{ Component }">
-      <transition name="page" mode="out-in">
-        <component :is="Component" />
-      </transition>
-    </router-view>
+  <div class="max-w-lg mx-auto min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans">
+   <router-view v-slot="{ Component }">
+    <transition name="page" mode="out-in">
+      <div :key="$route.path"> <component :is="Component" />
+      </div>
+    </transition>
+  </router-view>
   </div>
 </template>
 <style>

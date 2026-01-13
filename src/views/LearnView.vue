@@ -24,7 +24,7 @@ const getDiffClass = (diff) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto relative overflow-x-hidden">
+  <div class="min-h-screen bg-slate-50 flex flex-col">
     <AppHeader 
       :showBack="true"
       backRoute="/"
@@ -55,10 +55,11 @@ const getDiffClass = (diff) => {
       </div>
 
       <div class="space-y-4">
-        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 px-2">
-          <span class="w-4 h-px bg-slate-200"></span>
-          Daftar Materi
-        </h3>
+        <div class="flex items-center gap-4 py-4">
+              <div class="h-px flex-1 bg-gradient-to-r from-transparent to-slate-300"></div>
+              <span class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Daftar Materi</span>
+              <div class="h-px flex-1 bg-gradient-to-l from-transparent to-slate-300"></div>
+            </div>
 
         <div class="grid gap-4">
           <button

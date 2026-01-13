@@ -3,11 +3,6 @@
     class="p-6 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-40"
   >
     <div class="flex items-center gap-3">
-      <!-- <img 
-        src="/icons/logo.webp" 
-        :alt="APP_IDENTITY.name"
-        class="w-12 h-12 rounded-2xl shadow-lg  object-cover"
-      /> -->
       <div
         class="relative p-1 bg-gradient-to-br from-blue-400 to-emerald-400 rounded-[1rem] shadow-xl shadow-blue-500/20"
       >

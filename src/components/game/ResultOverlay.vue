@@ -1,8 +1,9 @@
 <script setup>
 import { computed } from 'vue'
-import { GAME_CONFIG } from '@/constants/GameConfig'
+import { useRouter } from 'vue-router'
 import { ArrowPathIcon, HomeIcon, TrophyIcon, HeartIcon } from '@heroicons/vue/24/solid'
 
+const router = useRouter()
 const props = defineProps({
   isGameOver: Boolean, // Jika true = Nyawa Habis, Jika false = Finish 10 soal
   score: Number,
@@ -14,7 +15,7 @@ const props = defineProps({
   diff: String,
 })
 
-const emit = defineEmits(['retry', 'home'])
+const emit = defineEmits(['retry'])
 
 const title = computed(() => (props.isGameOver ? 'Game Over!' : 'Luar Biasa!'))
 const subtitle = computed(() =>
@@ -97,8 +98,8 @@ const themeColor = computed(() => (props.isGameOver ? 'text-red-600' : 'text-eme
           <ArrowPathIcon class="w-5 h-5" /> Main Lagi
         </button>
         <button
-          @click="emit('home')"
-          class="w-full py-4 shadow-md bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-600 rounded-3xl font-bold flex items-center justify-center gap-2 transition-transform active:scale-95"
+          @click="router.push('/')"
+          class="w-full py-4 shadow-md bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-600 rounded-2xl font-bold flex items-center justify-center gap-2 transition-transform active:scale-95"
         >
           <HomeIcon class="w-5 h-5" /> Menu Utama
         </button>

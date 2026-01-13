@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
+import viteCompression from 'vite-plugin-compression'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { APP_IDENTITY } from './src/constants/appConfig'
@@ -11,10 +12,16 @@ import { APP_IDENTITY } from './src/constants/appConfig'
 export default defineConfig({
   plugins: [
     vue(),
+    viteCompression({
+      algorithm: 'brotliCompress', // 'giphy', // Bisa diganti 'brotliCompress' untuk hasil lebih kecil
+      ext: '.gz',
+      threshold: 10240, // Hanya kompres file di atas 10kb
+      deleteOriginFile: false, // Tetap simpan file asli agar aman jika server tidak support
+    }),
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
-      includeAssets: ['favicon.ico', 'logo.svg', 'audio/*.mp3', 'icons/*.png'],
+      includeAssets: ['favicon.ico', 'icons/*.webp', 'audio/*.mp3', 'icons/*.png'],
       workbox: {
         // Caching semua aset statis
         globPatterns: ['**/*.{js,css,html,ico,png,svg,mp3}'],

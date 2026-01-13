@@ -20,34 +20,34 @@ export const HELP_GUIDE = [
 
 export const PATCH_NOTES = [
   {
+    version: 'v1.8.4',
+    date: 'Januari 2026',
+    title: 'Tampilan Lebih Segar & Stabil',
+    changes: [
+      'Pembaruan desain halaman Kursus dan Detail Materi agar lebih nyaman dibaca',
+      'Perbaikan navigasi agar perpindahan halaman lebih lancar tanpa kendala layar kosong',
+      'Penyempurnaan tampilan menu atas (Header) yang kini tetap terlihat saat layar digulir',
+      'Sinkronisasi data skor antara halaman utama, riwayat, dan permainan',
+    ],
+  },
+  {
     version: 'v1.8.1-beta',
     date: 'Januari 2026',
-    title: 'Identity & UX Update',
+    title: 'Identitas Visual Baru',
     changes: [
-      'Sinkronisasi branding dengan Logo baru (Blue-Emerald)',
-      'Refaktor HomeView menjadi komponen modular',
-      'Penambahan Info Hub (Tentang, Bantuan, Update)',
-      'Perbaikan layout header sticky dan z-index',
+      'Wajah baru Cekas dengan tema warna Biru-Hijau yang lebih modern',
+      'Penambahan menu Pusat Informasi untuk bantuan dan panduan bermain',
+      'Tampilan statistik terbaik kini muncul lebih rapi di halaman utama',
     ],
   },
   {
-    version: 'v1.7.1-beta',
+    version: 'v1.7.0',
     date: 'Januari 2026',
-    title: 'PWA Stability',
+    title: 'Akses Lebih Mudah',
     changes: [
-      'Perbaikan manifest untuk instalasi Android/iOS',
-      'Dukungan mode offline (Service Worker)',
-      'Optimasi splash screen warna gelap',
-    ],
-  },
-  {
-    version: 'v1.6.0-beta',
-    date: 'Januari 2026',
-    title: 'Engine Refactor',
-    changes: [
-      'Pembaruan logika generator soal matematika',
-      'Sistem penyimpanan history di LocalStorage',
-      'Transisi antar halaman yang lebih halus',
+      'Aplikasi kini bisa diinstal ke layar utama HP dengan lebih mudah',
+      'Dukungan penggunaan aplikasi tanpa koneksi internet (Offline)',
+      'Layar pembuka (Splash Screen) yang lebih elegan saat aplikasi dibuka',
     ],
   },
 ]

@@ -124,13 +124,12 @@ const finishGame = (status = 'finish') => {
     level: levelInfo?.name || props.level,
     score: score.value,
     time: totalTimeSpent.value,
-    accuracy: Math.round((correctAnswers.value / totalQuestions.value) * 100),
+    accuracy: Math.round((score.value / currentStep.value) * 100),
     isSuccess: !isGameOver.value // Pengganti status SUCCESS/FAILED
   })
 }
 
 const handleRetry = () => window.location.reload()
-const handleHome = () => router.push('/')
 // Event Handlers untuk Keypad.vue
 const pressKey = (num) => handleKeyPress(num, checkAnswer)
 const clearInput = () => handleClear()
@@ -225,7 +224,6 @@ onUnmounted(() => {
       :level="levelInfo?.name"
       :diff="diffInfo?.label"
       @retry="handleRetry"
-      @home="handleHome"
     />
   </div>
 </template>

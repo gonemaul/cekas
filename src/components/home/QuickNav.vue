@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { SparklesIcon, ClockIcon } from '@heroicons/vue/24/outline'
+import { AcademicCapIcon, ClockIcon,ChevronRightIcon } from '@heroicons/vue/24/solid'
 const router = useRouter()
 </script>
 
@@ -14,7 +14,7 @@ const router = useRouter()
         <div
           class="p-2.5 bg-gradient-to-br from-blue-500 to-emerald-500 rounded-xl shadow-lg shadow-blue-500/20"
         >
-          <SparklesIcon class="w-5 h-5 text-white" />
+          <AcademicCapIcon class="w-5 h-5 text-white" />
         </div>
         <span class="font-bold text-sm uppercase tracking-tight">Kursus Metode</span>
       </div>

@@ -48,7 +48,7 @@ const startGame = (timeLimit) => {
 
 <template>
   <InfoModal v-if="isInfoOpen" :initialTab="activeTab" @close="isInfoOpen = false" />
-  <div class="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto shadow-2xl shadow-slate-200">
+  <div class="min-h-screen bg-slate-50 flex flex-col shadow-2xl shadow-slate-200">
     <HomeHeader @open-info="openInfo('about')" />
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -85,6 +85,11 @@ const startGame = (timeLimit) => {
               @select="startGame"
             />
 
+            <div v-if="step === 1" class="flex items-center gap-4 py-4 opacity-80">
+              <div class="h-px flex-1 bg-gradient-to-r from-transparent to-slate-300"></div>
+              <span class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Eksplorasi</span>
+              <div class="h-px flex-1 bg-gradient-to-l from-transparent to-slate-300"></div>
+            </div>
             <QuickNav v-if="step === 1" />
           </div>
         </Transition>
