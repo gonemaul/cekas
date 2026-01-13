@@ -48,7 +48,7 @@ const startGame = (timeLimit) => {
 
 <template>
   <InfoModal v-if="isInfoOpen" :initialTab="activeTab" @close="isInfoOpen = false" />
-  <div class="min-h-screen bg-slate-50 flex flex-col shadow-2xl shadow-slate-200">
+  <div class="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto shadow-2xl shadow-slate-200">
     <HomeHeader @open-info="openInfo('about')" />
     <Transition
       enter-active-class="transition duration-300 ease-out"

@@ -9,6 +9,7 @@ import { GameEngine } from '@/services/GameEngine'
 import { StorageService } from '@/services/StorageService'
 import { useTimer } from '@/composables/useTimer'
 import { audioService } from '@/services/AudioService'
+import { historyService } from '@/services/historyService'
 
 // Components
 import GameHeader from '@/components/game/GameHeader.vue'
@@ -118,12 +119,13 @@ const finishGame = (status = 'finish') => {
   }
   isFinished.value = true
 
-  StorageService.saveHistory({
+  historyService.save({
     mode: modeInfo?.name || props.mode,
     level: levelInfo?.name || props.level,
     score: score.value,
     time: totalTimeSpent.value,
-    status: isGameOver.value ? 'FAILED' : 'SUCCESS',
+    accuracy: Math.round((correctAnswers.value / totalQuestions.value) * 100),
+    isSuccess: !isGameOver.value // Pengganti status SUCCESS/FAILED
   })
 }
 

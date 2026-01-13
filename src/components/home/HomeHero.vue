@@ -1,16 +1,15 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { historyService } from '@/services/historyService'
 
 const bestScore = ref(0)
 const accuracy = ref(0)
 
 onMounted(() => {
-  // Ambil data dari history yang tersimpan di localStorage
-  const history = JSON.parse(localStorage.getItem('cekas_history') || '[]')
   if (history.length > 0) {
-    bestScore.value = Math.max(...history.map((h) => h.score))
-    const totalAcc = history.reduce((acc, curr) => acc + curr.accuracy, 0)
-    accuracy.value = Math.round(totalAcc / history.length)
+    const stats = historyService.getStats()
+  bestScore.value = stats.bestScore
+  accuracy.value = stats.avgAccuracy
   }
 })
 </script>
