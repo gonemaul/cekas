@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import { APP_IDENTITY } from './src/constants/appConfig'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -30,12 +31,12 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'Cekas Arithmetic',
-        short_name: 'Cekas',
-        description: 'Platform pelatihan mental aritmatika dengan metode kilat dan menyenangkan.',
+        name: APP_IDENTITY.fullName,
+        short_name: APP_IDENTITY.name,
+        description: APP_IDENTITY.description,
         start_url: '/',
-        theme_color: '#0f172a', // Warna slate-900 sesuai UI kita
-        background_color: '#ffffff',
+        theme_color: '#0f172a', // Mengikuti background logo
+        background_color: '#0f172a', // Agar splash screen senada dengan logo
         display: 'standalone', // Membuatnya tampil seperti aplikasi native
         orientation: 'portrait',
         icons: [

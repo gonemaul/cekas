@@ -27,14 +27,30 @@ onMounted(loadHistory)
   <div class="max-w-xl mx-auto min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans">
     <!-- <AppHeader /> -->
 
-    <main class="flex-grow">
+    <!-- <main class="flex-grow">
       <RouterView />
-    </main>
-
-    <!-- <footer class="p-8 text-center border-t border-slate-100">
-      <p class="text-[11px] text-slate-400 font-medium italic">
-        &copy; {{ new Date().getFullYear() }} {{ APP_IDENTITY.copyright }}
-      </p>
-    </footer> -->
+    </main> -->
+    <router-view v-slot="{ Component }">
+      <transition name="page" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </div>
 </template>
+<style>
+/* Animasi Page Fade-Slide */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.2s ease-in-out;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+</style>
