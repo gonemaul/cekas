@@ -20,6 +20,18 @@ export const HELP_GUIDE = [
 
 export const PATCH_NOTES = [
   {
+    version: 'v1.9.0',
+    date: 'Januari 2026',
+    title: 'Smart Logic Engine',
+    changes: [
+      'Sistem "Anti-Gagal": Menghapus soal yang menghasilkan angka negatif atau pecahan (koma).',
+      'Aturan Matematika Benar: Perbaikan urutan hitung campuran (Kabataku) pada soal berantai.',
+      'Variasi Soal Lebih Pintar: Mencegah munculnya soal yang sama atau hanya bertukar posisi angka.',
+      'Tantangan Seimbang: Menghapus angka yang terlalu mudah (seperti perkalian 1) agar latihan lebih efektif.',
+      'Optimasi Layar: Penyesuaian panjang soal agar tetap pas dan rapi di semua ukuran layar HP.',
+    ],
+  },
+  {
     version: 'v1.8.4',
     date: 'Januari 2026',
     title: 'Tampilan Lebih Segar & Stabil',

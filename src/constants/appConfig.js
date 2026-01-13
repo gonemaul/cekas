@@ -2,7 +2,7 @@ export const APP_IDENTITY = {
   name: 'Cekas',
   fullName: 'Cekas Arithmetic',
   slogan: 'Tangkas Berhitung, Cerdas Menalar',
-  version: '1.8.4-beta',
+  version: '1.9.0-beta',
   release_name: 'Visual Updated',
   storage_key: 'cekas_history_v1',
   copyright: 'Cekas Digital Indonesia',
