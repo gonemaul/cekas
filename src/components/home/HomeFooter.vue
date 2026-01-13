@@ -13,7 +13,7 @@ defineEmits(['open-patch'])
     </button>
 
     <p class="text-[9px] text-slate-300 font-bold uppercase tracking-widest leading-none">
-      &copy; {{ new Date().getFullYear() }} {{ APP_IDENTITY.name }} • {{ APP_IDENTITY.slogan }}
+      &copy; {{ new Date().getFullYear() }} {{ APP_IDENTITY.copyright }} • {{ APP_IDENTITY.version }}
     </p>
   </footer>
 </template>
